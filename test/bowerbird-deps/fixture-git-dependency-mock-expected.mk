@@ -32,7 +32,7 @@ $(if $(filter dev-mode,$1),echo "INFO: Cloning dependency in DEV mode: $2"
 test -n "$3"
 test -d "$3/.git"
 $(if $(filter dev-mode,$1),,rm -rfv -- "$3/.git"
-)mkdir -p $(dir $3/$5)
-touch $3/$5$(if $(filter dev-mode,$1),
+)test -d $3/.
+test -f $3/$5 || ( rm -rf $3 && >&2 echo "ERROR: Expected entry point not found: $3/$5" && exit 1 )$(if $(filter dev-mode,$1),
 :)
 endef
