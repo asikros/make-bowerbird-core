@@ -6,7 +6,6 @@
 include $(dir $(lastword $(MAKEFILE_LIST)))fixture-git-dependency-mock-expected.mk
 
 test-git-dependency-mock-override-entry:
-	test ! -d $(WORKDIR_TEST)/$@/mock-dep || rm -rf $(WORKDIR_TEST)/$@/mock-dep
 	@mkdir -p $(WORKDIR_TEST)/$@
 	@cat /dev/null > $(WORKDIR_TEST)/$@/results
 	$(MAKE) -j1 BOWERBIRD_MOCK_RESULTS=$(WORKDIR_TEST)/$@/results \
