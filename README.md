@@ -57,12 +57,22 @@ That's it! The loader downloads itself via curl, then clones the full repository
 Declare git dependencies with a clean kwargs API:
 
 ```makefile
+# Clone from branch
 $(call bowerbird::core::git-dependency, \
 	name=my-tool, \
 	url=https://github.com/org/my-tool.git, \
 	branch=main, \
 	entry=tool.mk)
+
+# Clone from semantic version tag (MAJOR.MINOR.PATCH format, no 'v' prefix)
+$(call bowerbird::core::git-dependency, \
+	name=my-lib, \
+	url=https://github.com/org/my-lib.git, \
+	branch=1.2.3, \
+	entry=lib.mk)
 ```
+
+**Note:** The `branch` parameter accepts both branch names and tags. For version tags, use semantic versioning format (`MAJOR.MINOR.PATCH`) without a prefix, e.g., `1.0.0` not `v1.0.0`.
 
 ### Command-Line Overrides
 
@@ -75,8 +85,8 @@ make check my-tool.branch=feature-xyz
 # Override URL (test a fork)
 make check my-tool.url=https://github.com/myuser/fork.git
 
-# Multiple overrides
-make check my-tool.branch=v2.0 my-other-tool.branch=main
+# Multiple overrides (tags use semantic versioning: MAJOR.MINOR.PATCH)
+make check my-tool.branch=2.0.0 my-other-tool.branch=main
 ```
 
 ### Development Mode
@@ -148,7 +158,7 @@ Declares a git dependency with kwargs API.
 **Parameters (all required):**
 - `name=<name>` - Dependency name (for override variables)
 - `url=<url>` - Git repository URL
-- `branch=<branch>` - Branch or tag name
+- `branch=<branch>` - Branch or tag name (tags should use semantic versioning: `MAJOR.MINOR.PATCH` without prefix)
 - `entry=<file>` - Entry point file (relative path)
 
 **Optional parameter:**

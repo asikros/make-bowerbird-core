@@ -5,14 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - YYYY-MM-DD
+## [Unreleased]
 
 ### Added
+- Initial release of make-bowerbird-core, consolidating make-bowerbird-deps and make-bowerbird-libs
+- Git-based loader (`bowerbird-loader.mk`) for simplified bootstrapping
+- Unified core functionality: dependency management + kwargs parsing
+- Kwargs-based API (`bowerbird::core::git-dependency`) available immediately after bootstrap
+- Command-line override system using dot notation (e.g., `make check dep.branch=feature`)
+- Development mode flag (`--bowerbird-dev-mode`) to preserve git history
+- Flexible spacing support in kwargs API
+- Comprehensive test suite (migrated from deps and libs)
+- Complete documentation with migration guide
 - GitHub Actions CI workflow for automated testing on macOS and Ubuntu
 - Live integration tests for git-dependency with error handling and cleanup
 - Path safety validation to prevent dangerous operations
 
 ### Changed
+- Repository consolidation: deps + libs → core
+- Bootstrap process: curl single loader → git clone full repo
+- Entry point: `bowerbird-deps.mk` → `bowerbird.mk`
+- Namespace: `bowerbird::libs::*` → `bowerbird::core::*` for main APIs, `bowerbird::lib::*` for utilities
 - **API Simplification**: `bowerbird::core::git-dependency` no longer requires outer `$(eval ...)` wrapper
   ```makefile
   # Old (verbose)
@@ -31,26 +44,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - GNU Make 4.3 compatibility in test recipes
 - Performance issue where parse-time git-dependency calls caused repeated clones
-
-## [1.0.0] - 2026-01-16
-
-### Added
-- Initial release of make-bowerbird-core, consolidating make-bowerbird-deps and make-bowerbird-libs
-- Git-based loader (`bowerbird-loader.mk`) for simplified bootstrapping
-- Unified core functionality: dependency management + kwargs parsing
-- Kwargs-based API (`bowerbird::core::git-dependency`) available immediately after bootstrap
-- Low-level positional API (`bowerbird::core::git-dependency-low-level`) for advanced use cases
-- Command-line override system using dot notation (e.g., `make check dep.branch=feature`)
-- Development mode flag (`--bowerbird-dev-mode`) to preserve git history
-- Flexible spacing support in kwargs API
-- Comprehensive test suite (migrated from deps and libs)
-- Complete documentation with migration guide
-
-### Changed
-- Repository consolidation: deps + libs → core
-- Bootstrap process: curl single loader → git clone full repo
-- Entry point: `bowerbird-deps.mk` → `bowerbird.mk`
-- Namespace: `bowerbird::libs::*` → `bowerbird::core::*` for main APIs, `bowerbird::lib::*` for utilities
 
 ### Deprecated
 - `make-bowerbird-deps` - Use `make-bowerbird-core` instead

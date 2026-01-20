@@ -48,10 +48,12 @@ endif
 #       path: Installation path.
 #       url: Git repository URL.
 #       branch: Branch or tag name (uses git clone --branch).
+#               For version tags, use semantic versioning format (MAJOR.MINOR.PATCH)
+#               without prefix, e.g., "1.0.0" not "v1.0.0".
 #       entry: Entry point file (relative path).
 #
 #	Command-Line Overrides:
-#		<name>.branch=<value>     Override branch/tag.
+#		<name>.branch=<value>     Override branch/tag (tags: "1.0.0" format).
 #		<name>.url=<value>        Override repository URL.
 #		<name>.path=<value>       Override installation path.
 #		<name>.entry=<value>      Override entry point.
