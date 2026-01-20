@@ -13,7 +13,7 @@ $(call bowerbird::core::git-dependency, \
 endif
 
 test-git-dependency-live-branch:
-	@$(MAKE) -j1 TEST_GIT_DEPENDENCY_LIVE_BRANCH=true $(WORKDIR_TEST)/test-git-dependency-live-branch/deps/bowerbird.mk
-	@test -d $(WORKDIR_TEST)/test-git-dependency-live-branch/deps || (echo "ERROR: Clone failed - directory not created" && exit 1)
-	@test -f $(WORKDIR_TEST)/test-git-dependency-live-branch/deps/bowerbird.mk || (echo "ERROR: Entry point not found" && exit 1)
-	@test ! -d $(WORKDIR_TEST)/test-git-dependency-live-branch/deps/.git || (echo "ERROR: .git should be removed (not in dev mode)" && exit 1)
+	@$(MAKE) -j1 TEST_GIT_DEPENDENCY_LIVE_BRANCH=true $(WORKDIR_TEST)/$@/deps/bowerbird.mk
+	@test -d $(WORKDIR_TEST)/$@/deps || (echo "ERROR: Clone failed - directory not created" && exit 1)
+	@test -f $(WORKDIR_TEST)/$@/deps/bowerbird.mk || (echo "ERROR: Entry point not found" && exit 1)
+	@test ! -d $(WORKDIR_TEST)/$@/deps/.git || (echo "ERROR: .git should be removed (not in dev mode)" && exit 1)

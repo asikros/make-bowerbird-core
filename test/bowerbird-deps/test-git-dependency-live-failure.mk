@@ -14,5 +14,5 @@ $(call bowerbird::core::git-dependency, \
 endif
 
 test-git-dependency-live-failure:
-	@$(MAKE) -j1 TEST_GIT_DEPENDENCY_LIVE_FAILURE=true $(WORKDIR_TEST)/test-git-dependency-live-failure/deps/should-not-exist.mk 2>&1 | grep -q "ERROR: Failed to setup dependency" || (echo "ERROR: Expected error message not found" && exit 1)
-	@test ! -d $(WORKDIR_TEST)/test-git-dependency-live-failure/deps || (echo "ERROR: Failed clone should clean up directory" && exit 1)
+	@$(MAKE) -j1 TEST_GIT_DEPENDENCY_LIVE_FAILURE=true $(WORKDIR_TEST)/$@/deps/should-not-exist.mk 2>&1 | grep -q "ERROR: Failed to setup dependency" || (echo "ERROR: Expected error message not found" && exit 1)
+	@test ! -d $(WORKDIR_TEST)/$@/deps || (echo "ERROR: Failed clone should clean up directory" && exit 1)

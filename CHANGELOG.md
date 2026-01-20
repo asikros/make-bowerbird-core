@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ```makefile
   # Old (verbose)
   $(eval $(call bowerbird::core::git-dependency, name=foo, ...))
-  
+
   # New (clean)
   $(call bowerbird::core::git-dependency, name=foo, ...)
   ```
