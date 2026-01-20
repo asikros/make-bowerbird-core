@@ -135,8 +135,10 @@ $1/.:
 		(\rm -rf $1 && \
 		 >&2 echo "ERROR: Failed to clone $2 $$(if $3,[branch: $3],[revision: $4])" && \
 		 exit 1)
-	@test -n "$1"
-	@test -d "$1/.git"
+	@test -n "$1" && test -d "$1/.git" || \
+		(\rm -rf $1 && \
+		 >&2 echo "ERROR: Clone validation failed for $1" && \
+		 exit 1)
 	$$(if $(__BOWERBIRD_KEEP_GIT),,@\rm -rfv -- "$1/.git")
 
 $1/$5: | $1/.
