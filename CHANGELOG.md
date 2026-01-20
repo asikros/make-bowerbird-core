@@ -8,10 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - YYYY-MM-DD
 
 ### Added
+- GitHub Actions CI workflow for automated testing on macOS and Ubuntu
+
 ### Changed
-### Deprecated
+- **API Simplification**: `bowerbird::core::git-dependency` no longer requires outer `$(eval ...)` wrapper
+  ```makefile
+  # Old (verbose)
+  $(eval $(call bowerbird::core::git-dependency, name=foo, ...))
+  
+  # New (clean)
+  $(call bowerbird::core::git-dependency, name=foo, ...)
+  ```
+
 ### Fixed
-### Security
+- GNU Make 4.3 compatibility in test recipes
 
 ## [1.0.0] - 2026-01-16
 
