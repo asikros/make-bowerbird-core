@@ -48,15 +48,10 @@ endif
 #       path: Installation path.
 #       url: Git repository URL.
 #       branch: Branch or tag name (uses git clone --branch).
-#       revision: Specific commit SHA (uses git clone --revision).
 #       entry: Entry point file (relative path).
-#
-#	Note:
-#		Specify either 'branch' OR 'revision', not both (mutually exclusive).
 #
 #	Command-Line Overrides:
 #		<name>.branch=<value>     Override branch/tag.
-#		<name>.revision=<value>   Override to specific SHA.
 #		<name>.url=<value>        Override repository URL.
 #		<name>.path=<value>       Override installation path.
 #		<name>.entry=<value>      Override entry point.
@@ -73,9 +68,6 @@ endif
 #		    branch=main, \
 #		    entry=bowerbird.mk)
 #
-#		$(call bowerbird::git-dependency,name=test,path=/tmp/test,\
-#		    url=https://github.com/example/repo.git,revision=abc123,entry=test.mk)
-#
 #		make check bowerbird-help.branch=feature-xyz
 #
 define bowerbird::core::git-dependency
@@ -84,18 +76,15 @@ $(eval $(call bowerbird::temp::kwargs-require,name,'name' parameter is required)
 $(eval $(call bowerbird::temp::kwargs-require,path,'path' parameter is required))\
 $(eval $(call bowerbird::temp::kwargs-require,url,'url' parameter is required))\
 $(eval $(call bowerbird::temp::kwargs-require,entry,'entry' parameter is required))\
-$(eval $(if $(and $(call bowerbird::temp::kwargs-defined,branch),$(call bowerbird::temp::kwargs-defined,revision)),$(error ERROR: Cannot specify both 'branch' and 'revision')))\
-$(eval $(if $(or $(call bowerbird::temp::kwargs-defined,branch),$(call bowerbird::temp::kwargs-defined,revision)),,$(error ERROR: Must specify either 'branch' or 'revision')))\
+$(eval $(call bowerbird::temp::kwargs-require,branch,'branch' parameter is required))\
 $(eval $(if $(filter . ..,$(call bowerbird::temp::kwargs,path)),$(error ERROR: 'path' cannot be '.' or '..': $(call bowerbird::temp::kwargs,path))))\
 $(eval __dep_name := $(call bowerbird::temp::kwargs,name))\
 $(eval $(__dep_name).path ?= $(call bowerbird::temp::kwargs,path))\
 $(eval $(__dep_name).url ?= $(call bowerbird::temp::kwargs,url))\
 $(eval $(__dep_name).branch ?=)\
-$(eval $(__dep_name).revision ?=)\
 $(if $(call bowerbird::temp::kwargs-defined,branch),$(eval $(__dep_name).branch := $(call bowerbird::temp::kwargs,branch)))\
-$(if $(call bowerbird::temp::kwargs-defined,revision),$(eval $(__dep_name).revision := $(call bowerbird::temp::kwargs,revision)))\
 $(eval $(__dep_name).entry ?= $(call bowerbird::temp::kwargs,entry))\
-$(eval $(call bowerbird::core::__git_dependency_impl,$($(__dep_name).path),$($(__dep_name).url),$($(__dep_name).branch),$($(__dep_name).revision),$($(__dep_name).entry)))
+$(eval $(call bowerbird::core::__git_dependency_impl,$($(__dep_name).path),$($(__dep_name).url),$($(__dep_name).branch),$($(__dep_name).entry)))
 endef
 
 # bowerbird::core::__git_dependency_impl
@@ -103,15 +92,14 @@ endef
 #	Internal implementation that clones a git dependency.
 #	Do not call directly - use bowerbird::git-dependency instead.
 #
-#	Uses --branch flag if branch is specified, --revision flag if revision is specified.
-#	Parameters are already resolved with command-line overrides applied.
+#	Uses --branch flag for cloning. Parameters are already resolved with
+#	command-line overrides applied.
 #
 #	Args:
 #		$1: Installation path for the dependency.
 #		$2: Git repository URL.
-#		$3: Branch or tag name (empty if revision is used).
-#		$4: Specific commit SHA (empty if branch is used).
-#		$5: Entry point file (relative path).
+#		$3: Branch or tag name.
+#		$4: Entry point file (relative path).
 #
 #	Returns:
 #		Creates target for dependency path and entry point.
@@ -131,7 +119,7 @@ $1/.:
 				--config http.lowSpeedLimit=1000 \
 				--config http.lowSpeedTime=60 \
 				$$(__BOWERBIRD_CLONE_DEPTH) \
-				$$(if $3,--branch $3,--revision $4) \
+				--branch $3 \
 				$2 \
 				$1 && \
 		test -n "$1" && \
@@ -139,12 +127,12 @@ $1/.:
 	) || (\
 		test -n "$1" && \
 		\rm -rf "$1" && \
-		>&2 echo "ERROR: Failed to setup dependency $2 $$(if $3,[branch: $3],[revision: $4])" && \
+		>&2 echo "ERROR: Failed to setup dependency $2 [branch: $3]" && \
 		exit 1\
 	)
 	$$(if $(__BOWERBIRD_KEEP_GIT),,@\rm -rfv -- "$1/.git")
 
-$1/$5: | $1/.
+$1/$4: | $1/.
 	@test -d $$|
 	@test -f $$@ || (\
 		test -n "$1" && \
@@ -153,6 +141,6 @@ $1/$5: | $1/.
 		exit 1\
 	)
 
-include $1/$5
+include $1/$4
 endef
 endif

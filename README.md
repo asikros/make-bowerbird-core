@@ -57,19 +57,11 @@ That's it! The loader downloads itself via curl, then clones the full repository
 Declare git dependencies with a clean kwargs API:
 
 ```makefile
-# Using branch
 $(call bowerbird::core::git-dependency, \
 	name=my-tool, \
 	url=https://github.com/org/my-tool.git, \
 	branch=main, \
 	entry=tool.mk)
-
-# Using specific commit
-$(call bowerbird::core::git-dependency, \
-	name=my-lib, \
-	url=https://github.com/org/my-lib.git, \
-	revision=abc123def456, \
-	entry=lib.mk)
 ```
 
 ### Command-Line Overrides
@@ -80,14 +72,11 @@ Override any dependency parameter from the command line:
 # Override branch
 make check my-tool.branch=feature-xyz
 
-# Override to specific commit
-make test my-lib.revision=abc123
-
 # Override URL (test a fork)
 make check my-tool.url=https://github.com/myuser/fork.git
 
 # Multiple overrides
-make check my-tool.branch=v2.0 my-lib.revision=specific-commit
+make check my-tool.branch=v2.0 my-other-tool.branch=main
 ```
 
 ### Development Mode
@@ -159,7 +148,7 @@ Declares a git dependency with kwargs API.
 **Parameters (all required):**
 - `name=<name>` - Dependency name (for override variables)
 - `url=<url>` - Git repository URL
-- `branch=<branch>` or `revision=<sha>` - Branch/tag name OR specific commit SHA (mutually exclusive)
+- `branch=<branch>` - Branch or tag name
 - `entry=<file>` - Entry point file (relative path)
 
 **Optional parameter:**
@@ -168,7 +157,6 @@ Declares a git dependency with kwargs API.
 **Command-line overrides:**
 - `<name>.url=<value>` - Override repository URL
 - `<name>.branch=<value>` - Override branch/tag
-- `<name>.revision=<value>` - Override to specific commit
 - `<name>.path=<value>` - Override installation path
 - `<name>.entry=<value>` - Override entry point
 
@@ -181,22 +169,6 @@ $(call bowerbird::core::git-dependency, \
 	entry=bowerbird.mk)
 ```
 
-### bowerbird::core::git-dependency-low-level
-
-Low-level positional API for advanced use cases or bootstrapping.
-
-**Signature:**
-```makefile
-$(call bowerbird::core::git-dependency-low-level, \
-	<name>, \
-	<path>, \
-	<url>, \
-	<branch>, \
-	<revision>, \
-	<entry>)
-```
-
-**Note:** Most users should use the kwargs API (`bowerbird::core::git-dependency`) instead.
 
 ### bowerbird::lib::kwargs-parse
 

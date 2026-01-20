@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - GitHub Actions CI workflow for automated testing on macOS and Ubuntu
+- Live integration tests for git-dependency with error handling and cleanup
+- Path safety validation to prevent dangerous operations
 
 ### Changed
 - **API Simplification**: `bowerbird::core::git-dependency` no longer requires outer `$(eval ...)` wrapper
@@ -20,8 +22,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   $(call bowerbird::core::git-dependency, name=foo, ...)
   ```
 
+### Removed
+- **BREAKING**: `revision` parameter removed from `git-dependency` API
+  - GitHub doesn't support cloning arbitrary commits via `--revision` flag
+  - Use `branch` parameter for branches and tags only
+  - For specific commits, clone a branch and checkout manually in a post-install step
+
 ### Fixed
 - GNU Make 4.3 compatibility in test recipes
+- Performance issue where parse-time git-dependency calls caused repeated clones
 
 ## [1.0.0] - 2026-01-16
 
@@ -33,7 +42,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Low-level positional API (`bowerbird::core::git-dependency-low-level`) for advanced use cases
 - Command-line override system using dot notation (e.g., `make check dep.branch=feature`)
 - Development mode flag (`--bowerbird-dev-mode`) to preserve git history
-- Branch/revision distinction for explicit clone behavior
 - Flexible spacing support in kwargs API
 - Comprehensive test suite (migrated from deps and libs)
 - Complete documentation with migration guide
