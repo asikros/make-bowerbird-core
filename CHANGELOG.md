@@ -5,38 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - YYYY-MM-DD
-
-### Added
-- GitHub Actions CI workflow for automated testing on macOS and Ubuntu
-
-### Changed
-- **API Simplification**: `bowerbird::core::git-dependency` no longer requires outer `$(eval ...)` wrapper
-  ```makefile
-  # Old (verbose)
-  $(eval $(call bowerbird::core::git-dependency, name=foo, ...))
-  
-  # New (clean)
-  $(call bowerbird::core::git-dependency, name=foo, ...)
-  ```
-
-### Fixed
-- GNU Make 4.3 compatibility in test recipes
-
-## [1.0.0] - 2026-01-16
+## [Unreleased]
 
 ### Added
 - Initial release of make-bowerbird-core, consolidating make-bowerbird-deps and make-bowerbird-libs
 - Git-based loader (`bowerbird-loader.mk`) for simplified bootstrapping
 - Unified core functionality: dependency management + kwargs parsing
 - Kwargs-based API (`bowerbird::core::git-dependency`) available immediately after bootstrap
-- Low-level positional API (`bowerbird::core::git-dependency-low-level`) for advanced use cases
 - Command-line override system using dot notation (e.g., `make check dep.branch=feature`)
 - Development mode flag (`--bowerbird-dev-mode`) to preserve git history
-- Branch/revision distinction for explicit clone behavior
 - Flexible spacing support in kwargs API
 - Comprehensive test suite (migrated from deps and libs)
 - Complete documentation with migration guide
+- GitHub Actions CI workflow for automated testing on macOS and Ubuntu
+- Live integration tests for git-dependency with error handling and cleanup
+- Path safety validation to prevent dangerous operations
+- Configurable git clone timeout variables (`BOWERBIRD_GIT_LOW_SPEED_LIMIT`, `BOWERBIRD_GIT_LOW_SPEED_TIME`, `BOWERBIRD_GIT_TIMEOUT`)
+- Live test for tag-based cloning using semantic versioning format (X.Y.Z)
 
 ### Changed
 - Repository consolidation: deps + libs → core
@@ -48,15 +33,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `make-bowerbird-deps` - Use `make-bowerbird-core` instead
 - `make-bowerbird-libs` - Use `make-bowerbird-core` instead
 
-## Background
+### Removed
+- **BREAKING**: `revision` parameter removed from `git-dependency` API
+  - GitHub doesn't support cloning arbitrary commits via `--revision` flag
+  - Use `branch` parameter for branches and tags only
+  - For specific commits, clone a branch and checkout manually in a post-install step
 
-This repository consolidates the previously separate `make-bowerbird-deps` and `make-bowerbird-libs` repositories into a unified core package. This eliminates the chicken-and-egg problem where kwargs support required a separate dependency, simplifies maintenance, and provides a better user experience.
+### Fixed
+- GNU Make 4.3 compatibility in test recipes
+- Performance issue where parse-time git-dependency calls caused repeated clones
+- Live failure test hanging by using `.invalid` TLD for instant DNS failure instead of non-existent GitHub URLs
 
-### Migration from make-bowerbird-deps + make-bowerbird-libs
 
-Projects using the old repos should:
-1. Replace bootstrap code to use `bowerbird-loader.mk`
-2. Convert `git-dependency-low-level` calls to `git-dependency` kwargs API
-3. Remove `bowerbird-libs` from dependencies (now included automatically)
-
-See [README.md#migration-guide](README.md#migration-guide) for detailed instructions.

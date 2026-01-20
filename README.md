@@ -57,20 +57,22 @@ That's it! The loader downloads itself via curl, then clones the full repository
 Declare git dependencies with a clean kwargs API:
 
 ```makefile
-# Using branch
+# Clone from branch
 $(call bowerbird::core::git-dependency, \
 	name=my-tool, \
 	url=https://github.com/org/my-tool.git, \
 	branch=main, \
 	entry=tool.mk)
 
-# Using specific commit
+# Clone from semantic version tag (MAJOR.MINOR.PATCH format, no 'v' prefix)
 $(call bowerbird::core::git-dependency, \
 	name=my-lib, \
 	url=https://github.com/org/my-lib.git, \
-	revision=abc123def456, \
+	branch=1.2.3, \
 	entry=lib.mk)
 ```
+
+**Note:** The `branch` parameter accepts both branch names and tags. For version tags, use semantic versioning format (`MAJOR.MINOR.PATCH`) without a prefix, e.g., `1.0.0` not `v1.0.0`.
 
 ### Command-Line Overrides
 
@@ -80,14 +82,11 @@ Override any dependency parameter from the command line:
 # Override branch
 make check my-tool.branch=feature-xyz
 
-# Override to specific commit
-make test my-lib.revision=abc123
-
 # Override URL (test a fork)
 make check my-tool.url=https://github.com/myuser/fork.git
 
-# Multiple overrides
-make check my-tool.branch=v2.0 my-lib.revision=specific-commit
+# Multiple overrides (tags use semantic versioning: MAJOR.MINOR.PATCH)
+make check my-tool.branch=2.0.0 my-other-tool.branch=main
 ```
 
 ### Development Mode
@@ -159,7 +158,7 @@ Declares a git dependency with kwargs API.
 **Parameters (all required):**
 - `name=<name>` - Dependency name (for override variables)
 - `url=<url>` - Git repository URL
-- `branch=<branch>` or `revision=<sha>` - Branch/tag name OR specific commit SHA (mutually exclusive)
+- `branch=<branch>` - Branch or tag name (tags should use semantic versioning: `MAJOR.MINOR.PATCH` without prefix)
 - `entry=<file>` - Entry point file (relative path)
 
 **Optional parameter:**
@@ -168,7 +167,6 @@ Declares a git dependency with kwargs API.
 **Command-line overrides:**
 - `<name>.url=<value>` - Override repository URL
 - `<name>.branch=<value>` - Override branch/tag
-- `<name>.revision=<value>` - Override to specific commit
 - `<name>.path=<value>` - Override installation path
 - `<name>.entry=<value>` - Override entry point
 
@@ -181,22 +179,6 @@ $(call bowerbird::core::git-dependency, \
 	entry=bowerbird.mk)
 ```
 
-### bowerbird::core::git-dependency-low-level
-
-Low-level positional API for advanced use cases or bootstrapping.
-
-**Signature:**
-```makefile
-$(call bowerbird::core::git-dependency-low-level, \
-	<name>, \
-	<path>, \
-	<url>, \
-	<branch>, \
-	<revision>, \
-	<entry>)
-```
-
-**Note:** Most users should use the kwargs API (`bowerbird::core::git-dependency`) instead.
 
 ### bowerbird::lib::kwargs-parse
 

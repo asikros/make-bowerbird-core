@@ -15,24 +15,21 @@ __SQUOTE := '\''
 #   Generates expected output for git clone commands.
 #
 #   Args:
-#       $1: Mode - one of: branch, revision, dev-mode
+#       $1: Mode - one of: branch, dev-mode
 #       $2: URL
 #       $3: Path
-#       $4: Branch or Revision (depending on mode)
+#       $4: Branch name
 #       $5: Entry file (relative path)
 #
 #   Examples:
 #       $(call bowerbird::core::test-fixture::expected-git-dependency,branch,https://mock.com/repo.git,/path/to/dep,main,bowerbird.mk)
-#       $(call bowerbird::core::test-fixture::expected-git-dependency,revision,https://mock.com/repo.git,/path/to/dep,abc123,lib.mk)
 #       $(call bowerbird::core::test-fixture::expected-git-dependency,dev-mode,https://mock.com/repo.git,/path/to/dep,main,bowerbird.mk)
 #
 define bowerbird::core::test-fixture::expected-git-dependency
 $(if $(filter dev-mode,$1),echo "INFO: Cloning dependency in DEV mode: $2"
-)git clone --config advice.detachedHead=false --config http.lowSpeedLimit=1000 --config http.lowSpeedTime=60 $(if $(filter dev-mode,$1),,--depth 1 )$(if $(filter revision,$1),--revision,--branch) $4 $2 $3 || (>&2 echo "ERROR: Failed to clone dependency $(__SQUOTE)$2$(__SQUOTE)" && exit 1)
-test -n "$3"
-test -d "$3/.git"
+)( GIT_TERMINAL_PROMPT=0 git clone --config advice.detachedHead=false --config http.lowSpeedLimit=1000 --config http.lowSpeedTime=30 --config http.timeout=30 $(if $(filter dev-mode,$1),,--depth 1 )--branch $4 $2 $3 && test -n "$3" && test -d "$3/.git" ) || ( test -n "$3" && rm -rf "$3" && >&2 echo "ERROR: Failed to setup dependency $2 [branch: $4]" && exit 1 )
 $(if $(filter dev-mode,$1),,rm -rfv -- "$3/.git"
 )test -d $3/.
-test -f $3/$5 || ( rm -rf $3 && >&2 echo "ERROR: Expected entry point not found: $3/$5" && exit 1 )$(if $(filter dev-mode,$1),
+test -f $3/$5 || ( test -n "$3" && rm -rf "$3" && >&2 echo "ERROR: Expected entry point not found: $3/$5" && exit 1 )$(if $(filter dev-mode,$1),
 :)
 endef
