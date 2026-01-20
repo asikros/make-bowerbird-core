@@ -82,20 +82,21 @@ test-git-dependency-live-failure-cleanup:
 ```makefile
 $1/.:
 	$$(if $(__BOWERBIRD_KEEP_GIT),@echo "INFO: Cloning dependency in DEV mode: $2")
-	@git clone --config advice.detachedHead=false \
-			--config http.lowSpeedLimit=1000 \
-			--config http.lowSpeedTime=60 \
-			$$(__BOWERBIRD_CLONE_DEPTH) \
-			$$(if $3,--branch $3,--revision $4) \
-			$2 \
-			$1 || \
-		(\rm -rf $1 && \
-		>&2 echo "ERROR: Failed to clone $2 $$(if $3,[branch: $3],[revision: $4])" && \
-		exit 1)
-	@test -n "$1" && test -d "$1/.git" || \
-		(\rm -rf $1 && \
-		>&2 echo "ERROR: Clone validation failed for $1" && \
-		exit 1)
+	@(\
+		git clone --config advice.detachedHead=false \
+				--config http.lowSpeedLimit=1000 \
+				--config http.lowSpeedTime=60 \
+				$$(__BOWERBIRD_CLONE_DEPTH) \
+				$$(if $3,--branch $3,--revision $4) \
+				$2 \
+				$1 && \
+		test -n "$1" && \
+		test -d "$1/.git"\
+	) || (
+		\rm -rf $1 && \
+		>&2 echo "ERROR: Failed to setup dependency $2 $$(if $3,[branch: $3],[revision: $4])" && \
+		exit 1\
+	)
 	$$(if $(__BOWERBIRD_KEEP_GIT),,@\rm -rfv -- "$1/.git")
 ```
 
