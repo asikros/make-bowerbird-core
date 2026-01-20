@@ -91,9 +91,11 @@ endef
 define bowerbird::temp::__git_dependency_impl
 $1/.:
 	$$(if $(__BOWERBIRD_KEEP_GIT),@echo "INFO: Cloning dependency in DEV mode: $2")
-	@git clone --config advice.detachedHead=false \
-			--config http.lowSpeedLimit=1000 \
-			--config http.lowSpeedTime=60 \
+	@GIT_TERMINAL_PROMPT=0 git clone \
+			--config advice.detachedHead=false \
+			--config http.lowSpeedLimit=$$(BOWERBIRD_GIT_LOW_SPEED_LIMIT) \
+			--config http.lowSpeedTime=$$(BOWERBIRD_GIT_LOW_SPEED_TIME) \
+			--config http.timeout=$$(BOWERBIRD_GIT_TIMEOUT) \
 			$$(__BOWERBIRD_CLONE_DEPTH) \
 			--branch $3 \
 			$2 \

@@ -41,4 +41,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GNU Make 4.3 compatibility in test recipes
 - Performance issue where parse-time git-dependency calls caused repeated clones
 
-[Unreleased]: https://github.com/asikros/make-bowerbird-core/commits/main
+
