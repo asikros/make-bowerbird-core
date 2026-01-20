@@ -21,10 +21,10 @@ ifdef TEST_GIT_DEPENDENCY_MOCK_DEV
 $(eval $(call bowerbird::core::git-dependency, \
     name=mock-dep-dev, \
     path=$(WORKDIR_TEST)/test-git-dependency-mock-dev-mode/deps, \
-    url=https://github.com/example/test-repo.git, \
+    url=https://mock.com/repo.git, \
     branch=develop, \
     entry=main.mk))
 endif
 
 expected-git-dependency-mock-dev-mode := \
-	$(call bowerbird::core::test-fixture::expected-git-dependency,dev-mode,https://github.com/example/test-repo.git,$(WORKDIR_TEST)/test-git-dependency-mock-dev-mode/deps,develop,main.mk)
+	$(call bowerbird::core::test-fixture::expected-git-dependency,dev-mode,https://mock.com/repo.git,$(WORKDIR_TEST)/test-git-dependency-mock-dev-mode/deps,develop,main.mk)

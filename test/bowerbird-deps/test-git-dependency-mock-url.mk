@@ -1,7 +1,7 @@
 # Mock test for git clone with different URL formats
 #
 # Verifies that bowerbird::core::git-dependency handles various URL formats
-# like https://gitlab.com/group/subgroup/project.git
+# like https://mock.com/group/subgroup/project.git
 
 include $(dir $(lastword $(MAKEFILE_LIST)))/fixture-git-dependency-mock-expected.mk
 
@@ -21,10 +21,10 @@ ifdef TEST_GIT_DEPENDENCY_MOCK_URL
 $(eval $(call bowerbird::core::git-dependency, \
     name=mock-dep-url, \
     path=$(WORKDIR_TEST)/test-git-dependency-mock-url/deps, \
-    url=https://gitlab.com/group/subgroup/project.git, \
+    url=https://mock.com/group/subgroup/project.git, \
     branch=main, \
     entry=bowerbird.mk))
 endif
 
 expected-git-dependency-mock-url := \
-	$(call bowerbird::core::test-fixture::expected-git-dependency,branch,https://gitlab.com/group/subgroup/project.git,$(WORKDIR_TEST)/test-git-dependency-mock-url/deps,main,bowerbird.mk)
+	$(call bowerbird::core::test-fixture::expected-git-dependency,branch,https://mock.com/group/subgroup/project.git,$(WORKDIR_TEST)/test-git-dependency-mock-url/deps,main,bowerbird.mk)

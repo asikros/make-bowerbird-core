@@ -11,7 +11,7 @@ test-git-dependency-mock-override-url:
 	@cat /dev/null > $(WORKDIR_TEST)/$@/results
 	$(MAKE) -j1 BOWERBIRD_MOCK_RESULTS=$(WORKDIR_TEST)/$@/results \
 		TEST_GIT_DEPENDENCY_MOCK_OVERRIDE_URL=true \
-		mock-dep-override-url.url=https://github.com/overridden/repo.git \
+		mock-dep-override-url.url=https://mock.com/overridden.git \
 		$(WORKDIR_TEST)/$@/deps/.
 	$(call bowerbird::test::compare-file-content-from-var,$(WORKDIR_TEST)/$@/results,expected-git-dependency-mock-override-url)
 
@@ -22,10 +22,10 @@ ifdef TEST_GIT_DEPENDENCY_MOCK_OVERRIDE_URL
 $(eval $(call bowerbird::core::git-dependency, \
     name=mock-dep-override-url, \
     path=$(WORKDIR_TEST)/test-git-dependency-mock-override-url/deps, \
-    url=https://github.com/example/test-repo.git, \
+    url=https://mock.com/repo.git, \
     branch=develop, \
     entry=lib.mk))
 endif
 
 expected-git-dependency-mock-override-url := \
-	$(call bowerbird::core::test-fixture::expected-git-dependency,branch,https://github.com/overridden/repo.git,$(WORKDIR_TEST)/test-git-dependency-mock-override-url/deps,develop,lib.mk)
+	$(call bowerbird::core::test-fixture::expected-git-dependency,branch,https://mock.com/overridden.git,$(WORKDIR_TEST)/test-git-dependency-mock-override-url/deps,develop,lib.mk)

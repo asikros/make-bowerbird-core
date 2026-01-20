@@ -22,9 +22,9 @@ __SQUOTE := '\''
 #       $5: Entry file (relative path)
 #
 #   Examples:
-#       $(call bowerbird::core::test-fixture::expected-git-dependency,branch,https://github.com/example/repo.git,/path/to/dep,main,bowerbird.mk)
-#       $(call bowerbird::core::test-fixture::expected-git-dependency,revision,https://github.com/example/repo.git,/path/to/dep,abc123,lib.mk)
-#       $(call bowerbird::core::test-fixture::expected-git-dependency,dev-mode,https://github.com/example/repo.git,/path/to/dep,main,bowerbird.mk)
+#       $(call bowerbird::core::test-fixture::expected-git-dependency,branch,https://mock.com/repo.git,/path/to/dep,main,bowerbird.mk)
+#       $(call bowerbird::core::test-fixture::expected-git-dependency,revision,https://mock.com/repo.git,/path/to/dep,abc123,lib.mk)
+#       $(call bowerbird::core::test-fixture::expected-git-dependency,dev-mode,https://mock.com/repo.git,/path/to/dep,main,bowerbird.mk)
 #
 define bowerbird::core::test-fixture::expected-git-dependency
 $(if $(filter dev-mode,$1),echo "INFO: Cloning dependency in DEV mode: $2"
