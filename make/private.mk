@@ -52,9 +52,5 @@ private_clean:
 	@echo
 
 ifdef bowerbird::test::suite
-# Mock tests - fast, no network required
-$(call bowerbird::test::suite,private_check_mock,test,test*mock*.mk,%-mock-%)
-
-# Live integration tests - requires network
-$(call bowerbird::test::suite,private_check_live,test,test*live*.mk,%-live-%)
+$(call bowerbird::test::suite,private_check,test,test*.mk,test*)
 endif

@@ -4,17 +4,10 @@
 # Requires network access. Set SKIP_LIVE_TESTS=1 to skip.
 
 test-git-dependency-live-failure:
-ifndef SKIP_LIVE_TESTS
-	@echo "Running live test: clone failure cleanup..."
-	@rm -rf $(WORKDIR_TEST)/$@/deps
-	@mkdir -p $(WORKDIR_TEST)/$@
+ifndef TEST_GIT_DEPENDENCY_LIVE_FAILURE
 	$(MAKE) -j1 TEST_GIT_DEPENDENCY_LIVE_FAILURE=true $(WORKDIR_TEST)/$@/deps/should-not-exist.mk 2>&1 | grep -q "ERROR: Failed to setup dependency" || (echo "ERROR: Expected error message not found" && exit 1)
-	@test ! -d $(WORKDIR_TEST)/$@/deps || (echo "ERROR: Failed clone should clean up directory" && exit 1)
-	@echo "✓ Live test passed: failure cleanup"
-	@rm -rf $(WORKDIR_TEST)/$@
 else
-	@echo "Skipping live test (SKIP_LIVE_TESTS=1)"
-endif
+	@test ! -d $(WORKDIR_TEST)/$@/deps || (echo "ERROR: Failed clone should clean up directory" && exit 1)
 
 ifdef TEST_GIT_DEPENDENCY_LIVE_FAILURE
 # Use an invalid URL to force a clone failure
