@@ -1,7 +1,8 @@
 # Proposal: Live Integration Tests and Improved Error Handling
 
-**Status:** Draft
+**Status:** Accepted
 **Created:** 2026-01-20
+**Accepted:** 2026-01-20
 **Author:** System
 
 ## Summary
@@ -18,8 +19,9 @@ Add live integration tests that clone real git repositories to verify `git-depen
 - Real-world failures (network issues, authentication, malformed URLs) are never tested
 
 **Error handling has gaps:**
-- If `git clone` fails (line 134), we exit with error but don't clean up the partially created directory
-- Only the "entry point not found" error path (line 142-146) does cleanup with `\rm -rf $1`
+- If `git clone` fails, we exit with error but don't clean up the partially created directory
+- If post-clone validation fails (`test -n` or `test -d .git`), no cleanup occurs
+- Only the "entry point not found" error path does cleanup with `\rm -rf $1`
 - This can leave `.make/deps/` in a bad state requiring manual cleanup
 
 **API ambiguity:**
@@ -35,7 +37,7 @@ Create `test/bowerbird-deps/test-git-dependency-live-*.mk` that actually clone r
 
 **Test repos to use:**
 - `https://github.com/asikros/make-bowerbird-core.git` - small, stable, we control it
-- `https://github.com/asikros/make-bowerbird-core.git` - small, stable, we control it
+- `https://github.com/asikros/make-bowerbird-test.git` - small, stable, we control it
 
 **Test cases:**
 ```makefile
@@ -92,8 +94,8 @@ $1/.:
 				$1 && \
 		test -n "$1" && \
 		test -d "$1/.git"\
-	) || (
-		\rm -rf $1 && \
+	) || (\
+		test -n "$1" && \rm -rf "$1" && \
 		>&2 echo "ERROR: Failed to setup dependency $2 $$(if $3,[branch: $3],[revision: $4])" && \
 		exit 1\
 	)
@@ -101,9 +103,14 @@ $1/.:
 ```
 
 **Changes:**
-- Add `\rm -rf $1` to clone failure path (line 140)
-- Add more detailed error messages showing URL and branch/revision
-- Consistent with entry point failure cleanup
+- Chain all validation steps with `&&` operators
+- Single `||` fallback path cleans up on any failure
+- Safety checks: `test -n "$1"` before `\rm -rf "$1"` (prevent empty path disasters)
+- Path validation: reject absolute paths (`/...`), reject `.` and `..`
+- Quoted variables: `"$1"` handles spaces safely
+- Subshell grouping makes success/failure paths visually distinct
+- Single error message: "Failed to setup dependency" covers all cases
+- Consistent with entry point failure cleanup pattern
 
 ### 3. Add Explicit `tag` Parameter (Optional Enhancement)
 
@@ -112,7 +119,7 @@ $1/.:
 $(call bowerbird::core::git-dependency, \
     name=dep, \
     url=https://github.com/org/repo.git, \
-    branch=v1.2.3, \
+    branch=main, \
     entry=lib.mk)
 ```
 
@@ -122,7 +129,7 @@ $(call bowerbird::core::git-dependency, \
 $(call bowerbird::core::git-dependency, \
     name=dep, \
     url=https://github.com/org/repo.git, \
-    tag=v1.2.3, \
+    tag=1.2.3, \
     entry=lib.mk)
 ```
 
@@ -148,11 +155,11 @@ $(if $(or $(call bowerbird::temp::kwargs-defined,branch),\
 
 ## Implementation Plan
 
-### Phase 1: Error Handling (Required)
-1. Update `bowerbird-deps.mk` clone failure handling
-2. Add better error messages
-3. Update `bowerbird-temp-deps.mk` to match
-4. Verify with existing mock tests
+### Phase 1: Error Handling (Completed)
+1. ✅ Updated `bowerbird-deps.mk` clone failure handling
+2. ✅ Simplified error messages with single cleanup path
+3. ✅ Updated `bowerbird-temp-deps.mk` to match
+4. ✅ Updated mock test fixtures to match new output
 
 ### Phase 2: Live Tests (Required)
 1. Create `test/bowerbird-deps/test-git-dependency-live-branch.mk`
@@ -250,7 +257,9 @@ check-live:
 
 ## Success Criteria
 
-- [ ] Clone failures clean up partial directories
+- [x] Clone failures clean up partial directories
+- [x] Validation failures clean up partial directories
+- [x] Single, clear error message for setup failures
 - [ ] Live tests clone real repos successfully
 - [ ] Live tests verify dev mode preserves .git
 - [ ] Live tests verify entry point validation

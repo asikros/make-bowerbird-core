@@ -86,6 +86,8 @@ $(eval $(call bowerbird::temp::kwargs-require,url,'url' parameter is required))\
 $(eval $(call bowerbird::temp::kwargs-require,entry,'entry' parameter is required))\
 $(eval $(if $(and $(call bowerbird::temp::kwargs-defined,branch),$(call bowerbird::temp::kwargs-defined,revision)),$(error ERROR: Cannot specify both 'branch' and 'revision')))\
 $(eval $(if $(or $(call bowerbird::temp::kwargs-defined,branch),$(call bowerbird::temp::kwargs-defined,revision)),,$(error ERROR: Must specify either 'branch' or 'revision')))\
+$(eval $(if $(filter /%,$(call bowerbird::temp::kwargs,path)),$(error ERROR: 'path' must be relative, not absolute: $(call bowerbird::temp::kwargs,path))))\
+$(eval $(if $(filter . ..,$(call bowerbird::temp::kwargs,path)),$(error ERROR: 'path' cannot be '.' or '..': $(call bowerbird::temp::kwargs,path))))\
 $(eval __dep_name := $(call bowerbird::temp::kwargs,name))\
 $(eval $(__dep_name).path ?= $(call bowerbird::temp::kwargs,path))\
 $(eval $(__dep_name).url ?= $(call bowerbird::temp::kwargs,url))\
@@ -125,24 +127,29 @@ endef
 define bowerbird::core::__git_dependency_impl
 $1/.:
 	$$(if $(__BOWERBIRD_KEEP_GIT),@echo "INFO: Cloning dependency in DEV mode: $2")
-	@git clone --config advice.detachedHead=false \
-			--config http.lowSpeedLimit=1000 \
-			--config http.lowSpeedTime=60 \
-			$$(__BOWERBIRD_CLONE_DEPTH) \
-			$$(if $3,--branch $3,--revision $4) \
-			$2 \
-			$1 && \
+	@(\
+		git clone --config advice.detachedHead=false \
+				--config http.lowSpeedLimit=1000 \
+				--config http.lowSpeedTime=60 \
+				$$(__BOWERBIRD_CLONE_DEPTH) \
+				$$(if $3,--branch $3,--revision $4) \
+				$2 \
+				$1 && \
 		test -n "$1" && \
-		test -d "$1/.git" || \
-		(\rm -rf $1 && \
-		 >&2 echo "ERROR: Failed to setup dependency $2 $$(if $3,[branch: $3],[revision: $4])" && \
-		 exit 1)
+		test -d "$1/.git"\
+	) || (\
+		test -n "$1" && \
+		\rm -rf "$1" && \
+		>&2 echo "ERROR: Failed to setup dependency $2 $$(if $3,[branch: $3],[revision: $4])" && \
+		exit 1\
+	)
 	$$(if $(__BOWERBIRD_KEEP_GIT),,@\rm -rfv -- "$1/.git")
 
 $1/$5: | $1/.
 	@test -d $$|
 	@test -f $$@ || (\
-		\rm -rf $1 && \
+		test -n "$1" && \
+		\rm -rf "$1" && \
 		>&2 echo "ERROR: Expected entry point not found: $$@" && \
 		exit 1\
 	)
