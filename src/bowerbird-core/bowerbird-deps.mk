@@ -15,15 +15,10 @@
 ifndef __BOWERBIRD_DEPS_MK_INCLUDED
 __BOWERBIRD_DEPS_MK_INCLUDED := 1
 
-ifndef __BOWERBIRD_DEPS_FLAGS_DEFINED
-__BOWERBIRD_DEPS_FLAGS_DEFINED := 1
-
 __BOWERBIRD_DEV_FLAG = --bowerbird-dev-mode
 .PHONY: $(__BOWERBIRD_DEV_FLAG)
 $(__BOWERBIRD_DEV_FLAG): ## Enables development mode (keeps .git history for dependencies)
 	@:
-
-endif
 
 # Set clone depth based on dev mode flag
 ifneq ($(filter $(__BOWERBIRD_DEV_FLAG),$(MAKECMDGOALS)),)
