@@ -52,5 +52,5 @@ private_clean:
 	@echo
 
 ifdef bowerbird::test::suite
-$(call bowerbird::test::suite,private_test,test,test*.mk,test*)
+$(call bowerbird::test::suite,private_check,test,test*.mk,test*)
 endif

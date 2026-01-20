@@ -35,17 +35,17 @@ $(bowerbird-core.path)/$(bowerbird-core.entry):
 include $(bowerbird-core.path)/$(bowerbird-core.entry)
 
 # Declare Dependencies using kwargs API
-$(eval $(call bowerbird::core::git-dependency, \
+$(call bowerbird::core::git-dependency, \
 	name=bowerbird-help, \
 	url=https://github.com/asikros/make-bowerbird-help.git, \
 	branch=main, \
-	entry=bowerbird.mk))
+	entry=bowerbird.mk)
 
-$(eval $(call bowerbird::core::git-dependency, \
+$(call bowerbird::core::git-dependency, \
 	name=bowerbird-test, \
 	url=https://github.com/asikros/make-bowerbird-test.git, \
 	branch=main, \
-	entry=bowerbird.mk))
+	entry=bowerbird.mk)
 ```
 
 That's it! The loader downloads itself via curl, then clones the full repository, making all functionality immediately available.
@@ -58,18 +58,18 @@ Declare git dependencies with a clean kwargs API:
 
 ```makefile
 # Using branch
-$(eval $(call bowerbird::core::git-dependency, \
+$(call bowerbird::core::git-dependency, \
 	name=my-tool, \
 	url=https://github.com/org/my-tool.git, \
 	branch=main, \
-	entry=tool.mk))
+	entry=tool.mk)
 
 # Using specific commit
-$(eval $(call bowerbird::core::git-dependency, \
+$(call bowerbird::core::git-dependency, \
 	name=my-lib, \
 	url=https://github.com/org/my-lib.git, \
 	revision=abc123def456, \
-	entry=lib.mk))
+	entry=lib.mk)
 ```
 
 ### Command-Line Overrides
@@ -116,13 +116,13 @@ Kwargs work with any spacing style:
 
 ```makefile
 # Readable (with spaces)
-$(eval $(call bowerbird::core::git-dependency, name=foo, url=..., branch=main, entry=foo.mk))
+$(call bowerbird::core::git-dependency, name=foo, url=..., branch=main, entry=foo.mk)
 
 # Compact (no spaces)
-$(eval $(call bowerbird::core::git-dependency,name=foo,url=...,branch=main,entry=foo.mk))
+$(call bowerbird::core::git-dependency,name=foo,url=...,branch=main,entry=foo.mk)
 
 # Mixed (whatever you prefer)
-$(eval $(call bowerbird::core::git-dependency, name=foo,url=..., branch=main,entry=foo.mk))
+$(call bowerbird::core::git-dependency, name=foo,url=..., branch=main,entry=foo.mk)
 ```
 
 ## How It Works
@@ -174,11 +174,11 @@ Declares a git dependency with kwargs API.
 
 **Example:**
 ```makefile
-$(eval $(call bowerbird::core::git-dependency, \
+$(call bowerbird::core::git-dependency, \
 	name=bowerbird-help, \
 	url=https://github.com/asikros/make-bowerbird-help.git, \
 	branch=main, \
-	entry=bowerbird.mk))
+	entry=bowerbird.mk)
 ```
 
 ### bowerbird::core::git-dependency-low-level
@@ -268,7 +268,7 @@ $(bowerbird-core.path)/$(bowerbird-core.entry):
 include $(bowerbird-core.path)/$(bowerbird-core.entry)
 
 # Kwargs API available immediately
-$(eval $(call bowerbird::core::git-dependency, name=bowerbird-help, url=..., branch=main, entry=bowerbird.mk))
+$(call bowerbird::core::git-dependency, name=bowerbird-help, url=..., branch=main, entry=bowerbird.mk)
 ```
 
 **Benefits:**

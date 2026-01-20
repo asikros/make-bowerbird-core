@@ -8,7 +8,7 @@ VERSION := $(shell git describe --always --dirty --broken 2> /dev/null || echo "
 # Targets
 .PHONY: check
 check: ## Runs all repository tests
-check: private_test
+check: private_check
 
 .PHONY: clean
 clean: ## Deletes all files created by Make
