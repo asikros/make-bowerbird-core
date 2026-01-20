@@ -26,14 +26,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bootstrap process: curl single loader → git clone full repo
 - Entry point: `bowerbird-deps.mk` → `bowerbird.mk`
 - Namespace: `bowerbird::libs::*` → `bowerbird::core::*` for main APIs, `bowerbird::lib::*` for utilities
-- **API Simplification**: `bowerbird::core::git-dependency` no longer requires outer `$(eval ...)` wrapper
-  ```makefile
-  # Old (verbose)
-  $(eval $(call bowerbird::core::git-dependency, name=foo, ...))
 
-  # New (clean)
-  $(call bowerbird::core::git-dependency, name=foo, ...)
-  ```
+### Deprecated
+- `make-bowerbird-deps` - Use `make-bowerbird-core` instead
+- `make-bowerbird-libs` - Use `make-bowerbird-core` instead
 
 ### Removed
 - **BREAKING**: `revision` parameter removed from `git-dependency` API
@@ -45,19 +41,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GNU Make 4.3 compatibility in test recipes
 - Performance issue where parse-time git-dependency calls caused repeated clones
 
-### Deprecated
-- `make-bowerbird-deps` - Use `make-bowerbird-core` instead
-- `make-bowerbird-libs` - Use `make-bowerbird-core` instead
-
-## Background
-
-This repository consolidates the previously separate `make-bowerbird-deps` and `make-bowerbird-libs` repositories into a unified core package. This eliminates the chicken-and-egg problem where kwargs support required a separate dependency, simplifies maintenance, and provides a better user experience.
-
-### Migration from make-bowerbird-deps + make-bowerbird-libs
-
-Projects using the old repos should:
-1. Replace bootstrap code to use `bowerbird-loader.mk`
-2. Convert `git-dependency-low-level` calls to `git-dependency` kwargs API
-3. Remove `bowerbird-libs` from dependencies (now included automatically)
-
-See [README.md#migration-guide](README.md#migration-guide) for detailed instructions.
+[Unreleased]: https://github.com/asikros/make-bowerbird-core/commits/main
