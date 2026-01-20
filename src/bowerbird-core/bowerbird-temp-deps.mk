@@ -54,13 +54,13 @@ __BOWERBIRD_TEMP_DEPS_MK_INCLUDED := 1
 #		make check bowerbird-help.branch=feature-xyz
 #
 define bowerbird::temp::git-dependency
-$(call bowerbird::temp::kwargs-parse,$1,$2,$3,$4,$5)\
-$(call bowerbird::temp::kwargs-require,name,'name' parameter is required)\
-$(call bowerbird::temp::kwargs-require,path,'path' parameter is required)\
-$(call bowerbird::temp::kwargs-require,url,'url' parameter is required)\
-$(call bowerbird::temp::kwargs-require,entry,'entry' parameter is required)\
-$(if $(and $(call bowerbird::temp::kwargs-defined,branch),$(call bowerbird::temp::kwargs-defined,revision)),$(error ERROR: Cannot specify both 'branch' and 'revision'))\
-$(if $(or $(call bowerbird::temp::kwargs-defined,branch),$(call bowerbird::temp::kwargs-defined,revision)),,$(error ERROR: Must specify either 'branch' or 'revision'))\
+$(eval $(call bowerbird::temp::kwargs-parse,$1,$2,$3,$4,$5))\
+$(eval $(call bowerbird::temp::kwargs-require,name,'name' parameter is required))\
+$(eval $(call bowerbird::temp::kwargs-require,path,'path' parameter is required))\
+$(eval $(call bowerbird::temp::kwargs-require,url,'url' parameter is required))\
+$(eval $(call bowerbird::temp::kwargs-require,entry,'entry' parameter is required))\
+$(eval $(if $(and $(call bowerbird::temp::kwargs-defined,branch),$(call bowerbird::temp::kwargs-defined,revision)),$(error ERROR: Cannot specify both 'branch' and 'revision')))\
+$(eval $(if $(or $(call bowerbird::temp::kwargs-defined,branch),$(call bowerbird::temp::kwargs-defined,revision)),,$(error ERROR: Must specify either 'branch' or 'revision')))\
 $(eval __dep_name := $(call bowerbird::temp::kwargs,name))\
 $(eval $(__dep_name).path ?= $(call bowerbird::temp::kwargs,path))\
 $(eval $(__dep_name).url ?= $(call bowerbird::temp::kwargs,url))\

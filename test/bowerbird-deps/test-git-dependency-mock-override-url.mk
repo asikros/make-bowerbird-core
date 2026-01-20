@@ -19,12 +19,12 @@ ifdef TEST_GIT_DEPENDENCY_MOCK_OVERRIDE_URL
 .PHONY: $(WORKDIR_TEST)/test-git-dependency-mock-override-url/deps/.
 .PHONY: $(WORKDIR_TEST)/test-git-dependency-mock-override-url/deps/lib.mk
 
-$(eval $(call bowerbird::core::git-dependency, \
+$(call bowerbird::core::git-dependency, \
     name=mock-dep-override-url, \
     path=$(WORKDIR_TEST)/test-git-dependency-mock-override-url/deps, \
     url=https://mock.com/repo.git, \
     branch=develop, \
-    entry=lib.mk))
+    entry=lib.mk)
 endif
 
 expected-git-dependency-mock-override-url := \

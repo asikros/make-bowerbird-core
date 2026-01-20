@@ -18,12 +18,12 @@ ifdef TEST_GIT_DEPENDENCY_MOCK_URL
 .PHONY: $(WORKDIR_TEST)/test-git-dependency-mock-url/deps/.
 .PHONY: $(WORKDIR_TEST)/test-git-dependency-mock-url/deps/bowerbird.mk
 
-$(eval $(call bowerbird::core::git-dependency, \
+$(call bowerbird::core::git-dependency, \
     name=mock-dep-url, \
     path=$(WORKDIR_TEST)/test-git-dependency-mock-url/deps, \
     url=https://mock.com/group/subgroup/project.git, \
     branch=main, \
-    entry=bowerbird.mk))
+    entry=bowerbird.mk)
 endif
 
 expected-git-dependency-mock-url := \

@@ -137,8 +137,8 @@ $(bowerbird-core.path)/$(bowerbird-core.entry):
 include $(bowerbird-core.path)/$(bowerbird-core.entry)
 
 # Kwargs API works immediately!
-$(eval $(call bowerbird::core::git-dependency, name=bowerbird-help, url=https://github.com/asikros/make-bowerbird-help.git, branch=main, entry=bowerbird.mk))
-$(eval $(call bowerbird::core::git-dependency, name=bowerbird-test, url=https://github.com/asikros/make-bowerbird-test.git, branch=main, entry=bowerbird.mk))
+$(call bowerbird::core::git-dependency, name=bowerbird-help, url=https://github.com/asikros/make-bowerbird-help.git, branch=main, entry=bowerbird.mk)
+$(call bowerbird::core::git-dependency, name=bowerbird-test, url=https://github.com/asikros/make-bowerbird-test.git, branch=main, entry=bowerbird.mk)
 ```
 
 ## Alternatives Considered
@@ -307,7 +307,7 @@ $(call bowerbird::core::git-dependency-low-level,bowerbird-help,$(WORKDIR_DEPS)/
 
 With:
 ```makefile
-$(eval $(call bowerbird::core::git-dependency, name=bowerbird-help, url=https://github.com/asikros/make-bowerbird-help.git, branch=main, entry=bowerbird.mk))
+$(call bowerbird::core::git-dependency, name=bowerbird-help, url=https://github.com/asikros/make-bowerbird-help.git, branch=main, entry=bowerbird.mk)
 ```
 
 **Step 3: Test**

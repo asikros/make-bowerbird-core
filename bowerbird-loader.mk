@@ -31,11 +31,11 @@
 #		include $(bowerbird-core.path)/$(bowerbird-core.entry)
 #
 #		# Now bowerbird::core::git-dependency is available!
-#		$(eval $(call bowerbird::core::git-dependency, \
+#		$(call bowerbird::core::git-dependency, \
 #			name=my-dep, \
 #			url=https://github.com/org/my-dep.git, \
 #			branch=main, \
-#			entry=entry.mk))
+#			entry=entry.mk)
 #
 #	Override examples:
 #		make check bowerbird-core.branch=dev-branch

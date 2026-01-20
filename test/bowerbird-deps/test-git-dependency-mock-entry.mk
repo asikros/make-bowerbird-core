@@ -18,12 +18,12 @@ ifdef TEST_GIT_DEPENDENCY_MOCK_ENTRY
 .PHONY: $(WORKDIR_TEST)/test-git-dependency-mock-entry/deps/.
 .PHONY: $(WORKDIR_TEST)/test-git-dependency-mock-entry/deps/src/lib/bowerbird.mk
 
-$(eval $(call bowerbird::core::git-dependency, \
+$(call bowerbird::core::git-dependency, \
     name=mock-dep-entry, \
     path=$(WORKDIR_TEST)/test-git-dependency-mock-entry/deps, \
     url=https://mock.com/repo.git, \
     branch=main, \
-    entry=src/lib/bowerbird.mk))
+    entry=src/lib/bowerbird.mk)
 endif
 
 expected-git-dependency-mock-entry := \
