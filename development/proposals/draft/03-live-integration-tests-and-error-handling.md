@@ -1,12 +1,12 @@
 # Proposal: Live Integration Tests and Improved Error Handling
 
-**Status:** Draft  
-**Created:** 2026-01-20  
+**Status:** Draft
+**Created:** 2026-01-20
 **Author:** System
 
 ## Summary
 
-Add live integration tests that actually clone real git repositories to verify `git-dependency` works end-to-end, and improve error handling to ensure failed clones don't leave the filesystem in a bad state.
+Add live integration tests that clone real git repositories to verify `git-dependency` works end-to-end, and improve error handling to ensure failed clones don't leave the filesystem in a bad state.
 
 ## Motivation
 
@@ -34,8 +34,8 @@ Add live integration tests that actually clone real git repositories to verify `
 Create `test/bowerbird-deps/test-git-dependency-live-*.mk` that actually clone real repositories:
 
 **Test repos to use:**
-- `https://github.com/asikros/make-bowerbird-help.git` - small, stable, we control it
-- `https://github.com/asikros/make-bowerbird-test.git` - small, stable, we control it
+- `https://github.com/asikros/make-bowerbird-core.git` - small, stable, we control it
+- `https://github.com/asikros/make-bowerbird-core.git` - small, stable, we control it
 
 **Test cases:**
 ```makefile
@@ -45,7 +45,7 @@ test-git-dependency-live-branch:
 	# Verify entry point exists
 
 test-git-dependency-live-tag:
-	# Clone with branch=v1.0.0 (semantic tag)
+	# Clone with branch=0.1.0 (semantic tag)
 	# Verify works same as branch
 
 test-git-dependency-live-revision:
@@ -89,11 +89,9 @@ $1/.:
 			$$(if $3,--branch $3,--revision $4) \
 			$2 \
 			$1 || \
-			(\rm -rf $1 && \
-			 >&2 echo "ERROR: Failed to clone dependency '$2'" && \
-			 >&2 echo "ERROR: URL: $2" && \
-			 $$(if $3,>&2 echo "ERROR: Branch/Tag: $3",>&2 echo "ERROR: Revision: $4") && \
-			 exit 1)
+		(\rm -rf $1 && \
+		>&2 echo "ERROR: Failed to clone $2 $$(if $3,[branch: $3],[revision: $4])" && \
+		exit 1)
 	@test -n "$1"
 	@test -d "$1/.git"
 	$$(if $(__BOWERBIRD_KEEP_GIT),,@\rm -rfv -- "$1/.git")

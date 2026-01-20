@@ -132,7 +132,9 @@ $1/.:
 			$$(if $3,--branch $3,--revision $4) \
 			$2 \
 			$1 || \
-			(>&2 echo "ERROR: Failed to clone dependency '$2'" && exit 1)
+		(\rm -rf $1 && \
+		 >&2 echo "ERROR: Failed to clone $2 $$(if $3,[branch: $3],[revision: $4])" && \
+		 exit 1)
 	@test -n "$1"
 	@test -d "$1/.git"
 	$$(if $(__BOWERBIRD_KEEP_GIT),,@\rm -rfv -- "$1/.git")
