@@ -86,7 +86,6 @@ $(eval $(call bowerbird::temp::kwargs-require,url,'url' parameter is required))\
 $(eval $(call bowerbird::temp::kwargs-require,entry,'entry' parameter is required))\
 $(eval $(if $(and $(call bowerbird::temp::kwargs-defined,branch),$(call bowerbird::temp::kwargs-defined,revision)),$(error ERROR: Cannot specify both 'branch' and 'revision')))\
 $(eval $(if $(or $(call bowerbird::temp::kwargs-defined,branch),$(call bowerbird::temp::kwargs-defined,revision)),,$(error ERROR: Must specify either 'branch' or 'revision')))\
-$(eval $(if $(filter /%,$(call bowerbird::temp::kwargs,path)),$(error ERROR: 'path' must be relative, not absolute: $(call bowerbird::temp::kwargs,path))))\
 $(eval $(if $(filter . ..,$(call bowerbird::temp::kwargs,path)),$(error ERROR: 'path' cannot be '.' or '..': $(call bowerbird::temp::kwargs,path))))\
 $(eval __dep_name := $(call bowerbird::temp::kwargs,name))\
 $(eval $(__dep_name).path ?= $(call bowerbird::temp::kwargs,path))\
