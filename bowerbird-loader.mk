@@ -10,6 +10,7 @@
 #		bowerbird-core.url    - Git repository URL (e.g., git@github.com:asikros/make-bowerbird-core.git)
 #		bowerbird-core.branch - Branch or tag to clone (e.g., main, v1.0.0)
 #		bowerbird-core.path   - Local installation path (e.g., $(WORKDIR_DEPS)/bowerbird-core)
+#		bowerbird-core.entry  - Entry point file to include (e.g., bowerbird.mk)
 #
 #	Optional variables:
 #		WORKDIR_DEPS          - Base directory for dependencies (required if not set)
@@ -22,6 +23,7 @@
 #		bowerbird-core.path ?= $(WORKDIR_DEPS)/bowerbird-core
 #		bowerbird-core.url ?= https://github.com/asikros/make-bowerbird-core.git
 #		bowerbird-core.branch ?= main
+#		bowerbird-core.entry ?= bowerbird.mk
 #
 #		$(WORKDIR_DEPS)/bowerbird-loader.mk:
 #			@curl --silent --show-error --fail --create-dirs -o $@ -L \
@@ -39,6 +41,7 @@
 #	Override examples:
 #		make check bowerbird-core.branch=dev-branch
 #		make test bowerbird-core.branch=v2.0.0
+#		make build bowerbird-core.entry=alternative.mk
 #
 
 # Error checking - require caller to set these variables
@@ -49,7 +52,8 @@ WORKDIR_DEPS ?= $(error ERROR: Undefined variable WORKDIR_DEPS)
 bowerbird-core.url ?= $(error ERROR: bowerbird-core.url must be set by caller)
 bowerbird-core.branch ?= $(error ERROR: bowerbird-core.branch must be set by caller)
 bowerbird-core.path ?= $(error ERROR: bowerbird-core.path must be set by caller)
-$(bowerbird-core.path)/bowerbird.mk:
+bowerbird-core.entry ?= bowerbird.mk
+$(bowerbird-core.path)/$(bowerbird-core.entry):
 	@echo "INFO: Cloning bowerbird-core from $(bowerbird-core.url) (branch: $(bowerbird-core.branch))"
 	@git clone --config advice.detachedHead=false \
 		--config http.lowSpeedLimit=1000 \
@@ -59,7 +63,7 @@ $(bowerbird-core.path)/bowerbird.mk:
 		$(bowerbird-core.path) || \
 		(>&2 echo "ERROR: Failed to clone bowerbird-core from '$(bowerbird-core.url)'" && exit 1)
 	@test -d $(bowerbird-core.path)/.git || (>&2 echo "ERROR: Repository .git directory not created" && exit 1)
-	@test -f $@ || (>&2 echo "ERROR: bowerbird.mk not found after cloning" && exit 1)
+	@test -f $@ || (>&2 echo "ERROR: Entry point $(bowerbird-core.entry) not found after cloning" && exit 1)
 
 # Include the main bowerbird entry point from the cloned repository
-include $(bowerbird-core.path)/bowerbird.mk
+include $(bowerbird-core.path)/$(bowerbird-core.entry)
