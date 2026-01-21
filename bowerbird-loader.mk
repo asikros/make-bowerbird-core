@@ -19,16 +19,15 @@
 #		WORKDIR_DEPS ?= $(error ERROR: Undefined variable WORKDIR_DEPS)
 #
 #		# Bootstrap bowerbird-core
-#		bowerbird-core.url ?= git@github.com:asikros/make-bowerbird-core.git
+#		bowerbird-core.url ?= https://github.com/asikros/make-bowerbird-core.git
 #		bowerbird-core.branch ?= main
 #		bowerbird-core.path ?= $(WORKDIR_DEPS)/bowerbird-core
-#		bowerbird-core.entry ?= bowerbird-loader.mk
 #
-#		$(bowerbird-core.path)/$(bowerbird-core.entry):
+#		$(bowerbird-core.path)/bowerbird-loader.mk:
 #			@curl --silent --show-error --fail --create-dirs -o $@ -L \
 #			https://raw.githubusercontent.com/asikros/make-bowerbird-core/$(bowerbird-core.branch)/bowerbird-loader.mk
 #
-#		include $(bowerbird-core.path)/$(bowerbird-core.entry)
+#		include $(bowerbird-core.path)/bowerbird-loader.mk
 #
 #		# Now bowerbird::core::git-dependency is available!
 #		$(call bowerbird::core::git-dependency, \
@@ -50,7 +49,7 @@ WORKDIR_DEPS ?= $(error ERROR: Undefined variable WORKDIR_DEPS)
 bowerbird-core.url ?= $(error ERROR: bowerbird-core.url must be set by caller)
 bowerbird-core.branch ?= $(error ERROR: bowerbird-core.branch must be set by caller)
 bowerbird-core.path ?= $(error ERROR: bowerbird-core.path must be set by caller)
-$(bowerbird-core.path)/.git:
+$(bowerbird-core.path)/bowerbird.mk:
 	@echo "INFO: Cloning bowerbird-core from $(bowerbird-core.url) (branch: $(bowerbird-core.branch))"
 	@git clone --config advice.detachedHead=false \
 		--config http.lowSpeedLimit=1000 \
@@ -59,7 +58,8 @@ $(bowerbird-core.path)/.git:
 		$(bowerbird-core.url) \
 		$(bowerbird-core.path) || \
 		(>&2 echo "ERROR: Failed to clone bowerbird-core from '$(bowerbird-core.url)'" && exit 1)
-	@test -d $@
+	@test -d $(bowerbird-core.path)/.git || (>&2 echo "ERROR: Repository .git directory not created" && exit 1)
+	@test -f $@ || (>&2 echo "ERROR: bowerbird.mk not found after cloning" && exit 1)
 
 # Include the main bowerbird entry point from the cloned repository
 include $(bowerbird-core.path)/bowerbird.mk

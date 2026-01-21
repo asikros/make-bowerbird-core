@@ -128,13 +128,11 @@ WORKDIR_DEPS ?= $(error ERROR: Undefined variable WORKDIR_DEPS)
 bowerbird-core.url ?= git@github.com:asikros/make-bowerbird-core.git
 bowerbird-core.branch ?= main
 bowerbird-core.path ?= $(WORKDIR_DEPS)/bowerbird-core
-bowerbird-core.entry ?= bowerbird-loader.mk
-
-$(bowerbird-core.path)/$(bowerbird-core.entry):
+$(bowerbird-core.path)/bowerbird-loader.mk:
 	@curl -sSfL --create-dirs -o $@ \
 	https://raw.githubusercontent.com/asikros/make-bowerbird-core/$(bowerbird-core.branch)/bowerbird-loader.mk
 
-include $(bowerbird-core.path)/$(bowerbird-core.entry)
+include $(bowerbird-core.path)/bowerbird-loader.mk
 
 # Kwargs API works immediately!
 $(call bowerbird::core::git-dependency, name=bowerbird-help, url=https://github.com/asikros/make-bowerbird-help.git, branch=main, entry=bowerbird.mk)
@@ -289,13 +287,11 @@ With:
 bowerbird-core.url ?= git@github.com:asikros/make-bowerbird-core.git
 bowerbird-core.branch ?= main
 bowerbird-core.path ?= $(WORKDIR_DEPS)/bowerbird-core
-bowerbird-core.entry ?= bowerbird-loader.mk
-
-$(bowerbird-core.path)/$(bowerbird-core.entry):
+$(bowerbird-core.path)/bowerbird-loader.mk:
 	@curl -sSfL --create-dirs -o $@ \
 	https://raw.githubusercontent.com/asikros/make-bowerbird-core/$(bowerbird-core.branch)/bowerbird-loader.mk
 
-include $(bowerbird-core.path)/$(bowerbird-core.entry)
+include $(bowerbird-core.path)/bowerbird-loader.mk
 ```
 
 **Step 2: Convert dependencies to kwargs API**
