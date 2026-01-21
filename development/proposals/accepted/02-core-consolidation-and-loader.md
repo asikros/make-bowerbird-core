@@ -125,16 +125,16 @@ $(call bowerbird::core::git-dependency-low-level,bowerbird-test,$(WORKDIR_DEPS)/
 WORKDIR_DEPS ?= $(error ERROR: Undefined variable WORKDIR_DEPS)
 
 # Bootstrap bowerbird-core
-bowerbird-core.url ?= git@github.com:asikros/make-bowerbird-core.git
-bowerbird-core.branch ?= main
 bowerbird-core.path ?= $(WORKDIR_DEPS)/bowerbird-core
-bowerbird-core.entry ?= bowerbird-loader.mk
+bowerbird-core.url ?= https://github.com/asikros/make-bowerbird-core.git
+bowerbird-core.branch ?= main
+bowerbird-core.entry ?= bowerbird.mk
 
-$(bowerbird-core.path)/$(bowerbird-core.entry):
+$(WORKDIR_DEPS)/bowerbird-loader.mk:
 	@curl -sSfL --create-dirs -o $@ \
-	https://raw.githubusercontent.com/asikros/make-bowerbird-core/$(bowerbird-core.branch)/bowerbird-loader.mk
+https://raw.githubusercontent.com/asikros/make-bowerbird-core/$(bowerbird-core.branch)/bowerbird-loader.mk
 
-include $(bowerbird-core.path)/$(bowerbird-core.entry)
+include $(WORKDIR_DEPS)/bowerbird-loader.mk
 
 # Kwargs API works immediately!
 $(call bowerbird::core::git-dependency, name=bowerbird-help, url=https://github.com/asikros/make-bowerbird-help.git, branch=main, entry=bowerbird.mk)
@@ -286,16 +286,16 @@ $(call bowerbird::core::git-dependency-low-level,bowerbird-libs,...)
 With:
 ```makefile
 # New: Bootstrap core with loader
-bowerbird-core.url ?= git@github.com:asikros/make-bowerbird-core.git
-bowerbird-core.branch ?= main
 bowerbird-core.path ?= $(WORKDIR_DEPS)/bowerbird-core
-bowerbird-core.entry ?= bowerbird-loader.mk
+bowerbird-core.url ?= https://github.com/asikros/make-bowerbird-core.git
+bowerbird-core.branch ?= main
+bowerbird-core.entry ?= bowerbird.mk
 
-$(bowerbird-core.path)/$(bowerbird-core.entry):
+$(WORKDIR_DEPS)/bowerbird-loader.mk:
 	@curl -sSfL --create-dirs -o $@ \
-	https://raw.githubusercontent.com/asikros/make-bowerbird-core/$(bowerbird-core.branch)/bowerbird-loader.mk
+https://raw.githubusercontent.com/asikros/make-bowerbird-core/$(bowerbird-core.branch)/bowerbird-loader.mk
 
-include $(bowerbird-core.path)/$(bowerbird-core.entry)
+include $(WORKDIR_DEPS)/bowerbird-loader.mk
 ```
 
 **Step 2: Convert dependencies to kwargs API**

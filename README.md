@@ -23,16 +23,16 @@ Core functionality for the Bowerbird Make framework, providing dependency manage
 WORKDIR_DEPS ?= $(error ERROR: Undefined variable WORKDIR_DEPS)
 
 # Bootstrap Bowerbird Core
-bowerbird-core.url ?= git@github.com:asikros/make-bowerbird-core.git
-bowerbird-core.branch ?= main
 bowerbird-core.path ?= $(WORKDIR_DEPS)/bowerbird-core
-bowerbird-core.entry ?= bowerbird-loader.mk
+bowerbird-core.url ?= https://github.com/asikros/make-bowerbird-core.git
+bowerbird-core.branch ?= main
+bowerbird-core.entry ?= bowerbird.mk
 
-$(bowerbird-core.path)/$(bowerbird-core.entry):
-	@curl --silent --show-error --fail -L --create-dirs -o $@ \
-	https://raw.githubusercontent.com/asikros/make-bowerbird-core/$(bowerbird-core.branch)/bowerbird-loader.mk
+$(WORKDIR_DEPS)/bowerbird-loader.mk:
+	@curl --silent --show-error --fail --create-dirs -o $@ -L \
+https://raw.githubusercontent.com/asikros/make-bowerbird-core/$(bowerbird-core.branch)/bowerbird-loader.mk
 
-include $(bowerbird-core.path)/$(bowerbird-core.entry)
+include $(WORKDIR_DEPS)/bowerbird-loader.mk
 
 # Declare Dependencies using kwargs API
 $(call bowerbird::core::git-dependency, \
@@ -238,16 +238,15 @@ $(call bowerbird::core::git-dependency-low-level,bowerbird-help,...)
 
 ```makefile
 # Bootstrap core (includes deps + libs)
-bowerbird-core.url ?= git@github.com:asikros/make-bowerbird-core.git
+bowerbird-core.url ?= https://github.com/asikros/make-bowerbird-core.git
 bowerbird-core.branch ?= main
 bowerbird-core.path ?= $(WORKDIR_DEPS)/bowerbird-core
-bowerbird-core.entry ?= bowerbird-loader.mk
 
-$(bowerbird-core.path)/$(bowerbird-core.entry):
+$(bowerbird-core.path)/bowerbird-loader.mk:
 	@curl -sSfL --create-dirs -o $@ \
 	https://raw.githubusercontent.com/asikros/make-bowerbird-core/$(bowerbird-core.branch)/bowerbird-loader.mk
 
-include $(bowerbird-core.path)/$(bowerbird-core.entry)
+include $(bowerbird-core.path)/bowerbird-loader.mk
 
 # Kwargs API available immediately
 $(call bowerbird::core::git-dependency, name=bowerbird-help, url=..., branch=main, entry=bowerbird.mk)
