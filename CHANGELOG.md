@@ -22,7 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Path safety validation to prevent dangerous operations
 - Configurable git clone timeout variables (`BOWERBIRD_GIT_LOW_SPEED_LIMIT`, `BOWERBIRD_GIT_LOW_SPEED_TIME`, `BOWERBIRD_GIT_TIMEOUT`)
 - Live test for tag-based cloning using semantic versioning format (X.Y.Z)
-- `bowerbird-core.entry` override variable for specifying alternative entry points (e.g., `make build bowerbird-core.entry=alternative.mk`)
 - Test for loader bootstrap functionality (`test-loader-bootstrap`)
 
 ### Changed
@@ -48,5 +47,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Loader parse-time include issue by merging clone and entry point validation into single target
 - Loader download path standardized to `$(WORKDIR_DEPS)/bowerbird-loader.mk` (separate from `bowerbird-core.path`)
 - Loader test to use `$(lastword $(MAKEFILE_LIST))` for path resolution, captured outside `ifdef` for correct evaluation
+- Loader clone target made idempotent to handle GNU Make 4.3 re-execution when loader file is created
 
 

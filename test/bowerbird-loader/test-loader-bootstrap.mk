@@ -5,25 +5,26 @@
 # - Clones the full repository
 # - Makes bowerbird::core::git-dependency available
 
+# Capture the path to this test file (evaluated at parse-time, outside ifdef)
+TEST_LOADER_BOOTSTRAP_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+
 ifdef TEST_LOADER_BOOTSTRAP
-# Configure bowerbird-core loader
+bowerbird-core.path ?= $(WORKDIR_DEPS)/bowerbird-core
 bowerbird-core.url ?= https://github.com/asikros/make-bowerbird-core.git
 bowerbird-core.branch ?= main
-bowerbird-core.path ?= $(WORKDIR_TEST)/test-loader-bootstrap/deps/bowerbird-core
+bowerbird-core.entry ?= bowerbird.mk
 
-# Download the loader (simulating curl bootstrap)
-$(bowerbird-core.path)/bowerbird-loader.mk:
+$(WORKDIR_DEPS)/bowerbird-loader.mk:
 	@mkdir -p $(dir $@)
-	@cp $(CURDIR)/bowerbird-loader.mk $@
+	@cp $(TEST_LOADER_BOOTSTRAP_DIR)../../bowerbird-loader.mk $@
 
-# Include the loader
-include $(bowerbird-core.path)/bowerbird-loader.mk
+include $(WORKDIR_DEPS)/bowerbird-loader.mk
 endif
 
 # Test target
 test-loader-bootstrap:
-	@$(MAKE) -j1 TEST_LOADER_BOOTSTRAP=true $(WORKDIR_TEST)/$@/deps/bowerbird-core/bowerbird-loader.mk
-	@test -f $(WORKDIR_TEST)/$@/deps/bowerbird-core/bowerbird-loader.mk || (echo "ERROR: Loader not downloaded" && exit 1)
+	@$(MAKE) -j1 TEST_LOADER_BOOTSTRAP=true WORKDIR_DEPS=$(WORKDIR_TEST)/$@/deps MAKECMDGOALS=
+	@test -f $(WORKDIR_TEST)/$@/deps/bowerbird-loader.mk || (echo "ERROR: Loader not downloaded" && exit 1)
 	@test -d $(WORKDIR_TEST)/$@/deps/bowerbird-core/.git || (echo "ERROR: Repository not cloned" && exit 1)
 	@test -f $(WORKDIR_TEST)/$@/deps/bowerbird-core/bowerbird.mk || (echo "ERROR: Entry point missing" && exit 1)
 	@test -f $(WORKDIR_TEST)/$@/deps/bowerbird-core/src/bowerbird-core/bowerbird-deps.mk || (echo "ERROR: Core files missing" && exit 1)

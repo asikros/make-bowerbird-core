@@ -44,24 +44,21 @@
 #		make build bowerbird-core.entry=alternative.mk
 #
 
-# Error checking - require caller to set these variables
-WORKDIR_DEPS ?= $(error ERROR: Undefined variable WORKDIR_DEPS)
-
-
-# Clone the full bowerbird-core repository
 bowerbird-core.url ?= $(error ERROR: bowerbird-core.url must be set by caller)
 bowerbird-core.branch ?= $(error ERROR: bowerbird-core.branch must be set by caller)
 bowerbird-core.path ?= $(error ERROR: bowerbird-core.path must be set by caller)
-bowerbird-core.entry ?= bowerbird.mk
+bowerbird-core.entry ?= $(error ERROR: bowerbird-core.entry must be set by caller)
 $(bowerbird-core.path)/$(bowerbird-core.entry):
-	@echo "INFO: Cloning bowerbird-core from $(bowerbird-core.url) (branch: $(bowerbird-core.branch))"
-	@git clone --config advice.detachedHead=false \
-		--config http.lowSpeedLimit=1000 \
-		--config http.lowSpeedTime=60 \
-		--branch $(bowerbird-core.branch) \
-		$(bowerbird-core.url) \
-		$(bowerbird-core.path) || \
-		(>&2 echo "ERROR: Failed to clone bowerbird-core from '$(bowerbird-core.url)'" && exit 1)
+	@if [ ! -d $(bowerbird-core.path)/.git ]; then \
+		echo "INFO: Cloning bowerbird-core from $(bowerbird-core.url) (branch: $(bowerbird-core.branch))" && \
+		git clone --config advice.detachedHead=false \
+			--config http.lowSpeedLimit=1000 \
+			--config http.lowSpeedTime=60 \
+			--branch $(bowerbird-core.branch) \
+			$(bowerbird-core.url) \
+			$(bowerbird-core.path) || \
+			(>&2 echo "ERROR: Failed to clone bowerbird-core from '$(bowerbird-core.url)'" && exit 1); \
+	fi
 	@test -d $(bowerbird-core.path)/.git || (>&2 echo "ERROR: Repository .git directory not created" && exit 1)
 	@test -f $@ || (>&2 echo "ERROR: Entry point $(bowerbird-core.entry) not found after cloning" && exit 1)
 
