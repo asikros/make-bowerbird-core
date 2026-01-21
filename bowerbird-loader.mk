@@ -25,7 +25,7 @@
 #
 #		$(bowerbird-core.path)/bowerbird-loader.mk:
 #			@curl --silent --show-error --fail --create-dirs -o $@ -L \
-#			https://raw.githubusercontent.com/asikros/make-bowerbird-core/$(bowerbird-core.branch)/bowerbird-loader.mk
+#		https://raw.githubusercontent.com/asikros/make-bowerbird-core/$(bowerbird-core.branch)/bowerbird-loader.mk
 #
 #		include $(bowerbird-core.path)/bowerbird-loader.mk
 #

@@ -27,8 +27,8 @@ bowerbird-core.url ?= https://github.com/asikros/make-bowerbird-core.git
 bowerbird-core.branch ?= main
 bowerbird-core.path ?= $(WORKDIR_DEPS)/bowerbird-core
 $(bowerbird-core.path)/bowerbird-loader.mk:
-	@curl --silent --show-error --fail -L --create-dirs -o $@ \
-	https://raw.githubusercontent.com/asikros/make-bowerbird-core/$(bowerbird-core.branch)/bowerbird-loader.mk
+	@curl --silent --show-error --fail --create-dirs -o $@ -L \
+https://raw.githubusercontent.com/asikros/make-bowerbird-core/$(bowerbird-core.branch)/bowerbird-loader.mk
 
 include $(bowerbird-core.path)/bowerbird-loader.mk
 
