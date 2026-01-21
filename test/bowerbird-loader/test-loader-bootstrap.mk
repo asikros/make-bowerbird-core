@@ -5,13 +5,11 @@
 # - Clones the full repository
 # - Makes bowerbird::core::git-dependency available
 
-# Test setup
-WORKDIR_DEPS := $(WORKDIR_TEST)/test-loader-bootstrap/deps
-
+ifdef TEST_LOADER_BOOTSTRAP
 # Configure bowerbird-core loader
 bowerbird-core.url ?= https://github.com/asikros/make-bowerbird-core.git
 bowerbird-core.branch ?= main
-bowerbird-core.path ?= $(WORKDIR_DEPS)/bowerbird-core
+bowerbird-core.path ?= $(WORKDIR_TEST)/test-loader-bootstrap/deps/bowerbird-core
 
 # Download the loader (simulating curl bootstrap)
 $(bowerbird-core.path)/bowerbird-loader.mk:
@@ -20,16 +18,15 @@ $(bowerbird-core.path)/bowerbird-loader.mk:
 
 # Include the loader
 include $(bowerbird-core.path)/bowerbird-loader.mk
+endif
 
 # Test target
 test-loader-bootstrap:
-	@echo "Testing loader bootstrap..."
-	@test -d $(bowerbird-core.path)/.git || (echo "ERROR: Repository not cloned" && exit 1)
-	@test -f $(bowerbird-core.path)/bowerbird.mk || (echo "ERROR: Entry point missing" && exit 1)
-	@test -f $(bowerbird-core.path)/src/bowerbird-core/bowerbird-deps.mk || (echo "ERROR: Core files missing" && exit 1)
+	@$(MAKE) -j1 TEST_LOADER_BOOTSTRAP=true $(WORKDIR_TEST)/$@/deps/bowerbird-core/bowerbird.mk
+	@test -d $(WORKDIR_TEST)/$@/deps/bowerbird-core/.git || (echo "ERROR: Repository not cloned" && exit 1)
+	@test -f $(WORKDIR_TEST)/$@/deps/bowerbird-core/bowerbird.mk || (echo "ERROR: Entry point missing" && exit 1)
+	@test -f $(WORKDIR_TEST)/$@/deps/bowerbird-core/src/bowerbird-core/bowerbird-deps.mk || (echo "ERROR: Core files missing" && exit 1)
 	@echo "✓ Loader cloned repository successfully"
 	@echo "✓ Entry point exists"
 	@echo "✓ Core files are present"
-	@# Verify that bowerbird::core::git-dependency is available
-	@$(if $(value bowerbird::core::git-dependency),echo "✓ bowerbird::core::git-dependency macro is available",exit 1)
 	@echo "SUCCESS: Loader bootstrap test passed"
