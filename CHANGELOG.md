@@ -44,9 +44,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GNU Make 4.3 compatibility in test recipes
 - Performance issue where parse-time git-dependency calls caused repeated clones
 - Live failure test hanging by using `.invalid` TLD for instant DNS failure instead of non-existent GitHub URLs
-- Loader parse-time include issue by merging clone and entry point validation into single target
+- Loader parse-time include issue by splitting clone and entry point into separate targets with order-only prerequisite
 - Loader download path standardized to `$(WORKDIR_DEPS)/bowerbird-loader.mk` (separate from `bowerbird-core.path`)
 - Loader test to use `$(lastword $(MAKEFILE_LIST))` for path resolution, captured outside `ifdef` for correct evaluation
-- Loader clone target made idempotent to handle GNU Make 4.3 re-execution when loader file is created
+- GNU Make 4.3 re-execution issue in loader by using order-only prerequisite to prevent re-cloning when loader file is created
 
 

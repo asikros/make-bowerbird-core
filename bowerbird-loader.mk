@@ -7,13 +7,10 @@
 #	the complete bowerbird-core repository, making all functionality immediately available.
 #
 #	Required variables (must be set by caller):
-#		bowerbird-core.url    - Git repository URL (e.g., git@github.com:asikros/make-bowerbird-core.git)
-#		bowerbird-core.branch - Branch or tag to clone (e.g., main, v1.0.0)
+#		bowerbird-core.url    - Git repository URL (e.g., https://github.com/asikros/make-bowerbird-core.git)
+#		bowerbird-core.branch - Branch or tag to clone (e.g., main, 1.0.0)
 #		bowerbird-core.path   - Local installation path (e.g., $(WORKDIR_DEPS)/bowerbird-core)
 #		bowerbird-core.entry  - Entry point file to include (e.g., bowerbird.mk)
-#
-#	Optional variables:
-#		WORKDIR_DEPS          - Base directory for dependencies (required if not set)
 #
 #	Example usage in your make/deps.mk:
 #
@@ -48,17 +45,20 @@ bowerbird-core.url ?= $(error ERROR: bowerbird-core.url must be set by caller)
 bowerbird-core.branch ?= $(error ERROR: bowerbird-core.branch must be set by caller)
 bowerbird-core.path ?= $(error ERROR: bowerbird-core.path must be set by caller)
 bowerbird-core.entry ?= $(error ERROR: bowerbird-core.entry must be set by caller)
-$(bowerbird-core.path)/$(bowerbird-core.entry):
-	@if [ ! -d $(bowerbird-core.path)/.git ]; then \
-		echo "INFO: Cloning bowerbird-core from $(bowerbird-core.url) (branch: $(bowerbird-core.branch))" && \
-		git clone --config advice.detachedHead=false \
-			--config http.lowSpeedLimit=1000 \
-			--config http.lowSpeedTime=60 \
-			--branch $(bowerbird-core.branch) \
-			$(bowerbird-core.url) \
-			$(bowerbird-core.path) || \
-			(>&2 echo "ERROR: Failed to clone bowerbird-core from '$(bowerbird-core.url)'" && exit 1); \
-	fi
+
+# Clone the repository
+$(bowerbird-core.path)/.git:
+	@echo "INFO: Cloning bowerbird-core from $(bowerbird-core.url) (branch: $(bowerbird-core.branch))"
+	@git clone --config advice.detachedHead=false \
+		--config http.lowSpeedLimit=1000 \
+		--config http.lowSpeedTime=60 \
+		--branch $(bowerbird-core.branch) \
+		$(bowerbird-core.url) \
+		$(bowerbird-core.path) || \
+		(>&2 echo "ERROR: Failed to clone bowerbird-core from '$(bowerbird-core.url)'" && exit 1)
+
+# Entry point depends on repository being cloned (order-only prerequisite)
+$(bowerbird-core.path)/$(bowerbird-core.entry): | $(bowerbird-core.path)/.git
 	@test -d $(bowerbird-core.path)/.git || (>&2 echo "ERROR: Repository .git directory not created" && exit 1)
 	@test -f $@ || (>&2 echo "ERROR: Entry point $(bowerbird-core.entry) not found after cloning" && exit 1)
 
