@@ -22,11 +22,13 @@ endif
 
 # Test target
 test-loader-bootstrap:
-	@$(MAKE) -j1 TEST_LOADER_BOOTSTRAP=true $(WORKDIR_TEST)/$@/deps/bowerbird-core/bowerbird.mk
+	@$(MAKE) -j1 TEST_LOADER_BOOTSTRAP=true $(WORKDIR_TEST)/$@/deps/bowerbird-core/bowerbird-loader.mk
+	@test -f $(WORKDIR_TEST)/$@/deps/bowerbird-core/bowerbird-loader.mk || (echo "ERROR: Loader not downloaded" && exit 1)
 	@test -d $(WORKDIR_TEST)/$@/deps/bowerbird-core/.git || (echo "ERROR: Repository not cloned" && exit 1)
 	@test -f $(WORKDIR_TEST)/$@/deps/bowerbird-core/bowerbird.mk || (echo "ERROR: Entry point missing" && exit 1)
 	@test -f $(WORKDIR_TEST)/$@/deps/bowerbird-core/src/bowerbird-core/bowerbird-deps.mk || (echo "ERROR: Core files missing" && exit 1)
-	@echo "✓ Loader cloned repository successfully"
+	@echo "✓ Loader downloaded successfully"
+	@echo "✓ Loader cloned repository"
 	@echo "✓ Entry point exists"
 	@echo "✓ Core files are present"
 	@echo "SUCCESS: Loader bootstrap test passed"
