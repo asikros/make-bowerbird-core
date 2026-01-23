@@ -1,9 +1,10 @@
 # Complete Dependency Override System
 
 ```
-Status:   Accepted
+Status:   Implemented
 Project:  make-bowerbird-core
 Created:  2025-12-20
+Implemented: 2026-01-15
 Author:   Bowerbird Team
 ```
 
