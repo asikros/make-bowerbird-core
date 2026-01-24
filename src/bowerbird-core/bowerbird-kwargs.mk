@@ -75,6 +75,7 @@ $(foreach n,$(__BOWERBIRD_LIB_KWARGS_ARG_NUMS),\
         )\
     )\
 )
+$(if $(filter-out undefined,$(origin $(__BOWERBIRD_LIB_KWARGS_ARGS_LIMIT))),$(error ERROR: Too many arguments (maximum $(words $(__BOWERBIRD_LIB_KWARGS_ARG_NUMS)) supported)))
 endef
 
 # bowerbird::core::kwargs
