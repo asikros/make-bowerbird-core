@@ -24,7 +24,7 @@ __BOWERBIRD_LIB_KWARGS_SPACE := $(__BOWERBIRD_LIB_KWARGS_EMPTY) $(__BOWERBIRD_LI
 __BOWERBIRD_LIB_KWARGS_VALUE_PREFIX := __BOWERBIRD_LIB_KWARGS_VALUE
 
 # Keyword arguments limit (we support one less than this value)
-__BOWERBIRD_LIB_KWARGS_ARGS_LIMIT := 6
+__BOWERBIRD_LIB_KWARGS_ARGS_LIMIT := 26
 
 # Helper for building argument list (excludes position 1 and ARGS_LIMIT)
 # Stored as immediate value to avoid re-executing shell command on each use
