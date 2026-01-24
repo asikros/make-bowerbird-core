@@ -61,9 +61,17 @@ $(eval __TEST_25_ARGS_Y := $(call bowerbird::core::kwargs,y))
 endif
 
 
-test-kwargs-args-26-args-exceeds-limit:
-ifndef TEST_KWARGS_ARGS_26_ARGS_EXCEEDS_LIMIT
-	@$(MAKE) TEST_KWARGS_ARGS_26_ARGS_EXCEEDS_LIMIT=true $(MAKECMDGOALS) 2>&1 | \
+test-kwargs-args-26-args-fails:
+ifndef TEST_KWARGS_ARGS_26_ARGS_FAILS
+	@! $(MAKE) TEST_KWARGS_ARGS_26_ARGS_FAILS=true $(MAKECMDGOALS) 2>&1
+else
+$(eval $(call bowerbird::core::kwargs-parse,a=1,b=2,c=3,d=4,e=5,f=6,g=7,h=8,i=9,j=10,k=11,l=12,m=13,n=14,o=15,p=16,q=17,r=18,s=19,t=20,u=21,v=22,w=23,x=24,y=25,z=26))
+endif
+
+
+test-kwargs-args-26-args-error-message:
+ifndef TEST_KWARGS_ARGS_26_ARGS_ERROR_MESSAGE
+	@$(MAKE) TEST_KWARGS_ARGS_26_ARGS_ERROR_MESSAGE=true $(MAKECMDGOALS) 2>&1 | \
 		grep -q "ERROR: Too many arguments (maximum 25 supported)"
 else
 $(eval $(call bowerbird::core::kwargs-parse,a=1,b=2,c=3,d=4,e=5,f=6,g=7,h=8,i=9,j=10,k=11,l=12,m=13,n=14,o=15,p=16,q=17,r=18,s=19,t=20,u=21,v=22,w=23,x=24,y=25,z=26))
