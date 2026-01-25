@@ -6,11 +6,11 @@
 
 ifdef TEST_GIT_DEPENDENCY_LIVE_TAG
 $(call bowerbird::core::git-dependency, \
-    name=live-test-tag, \
-    path=$(WORKDIR_TEST)/test-git-dependency-live-tag/deps, \
-    url=https://github.com/asikros/make-bowerbird-help.git, \
-    branch=0.1.0, \
-    entry=bowerbird.mk)
+		name=live-test-tag, \
+		path=$(WORKDIR_TEST)/test-git-dependency-live-tag/deps, \
+		url=https://github.com/asikros/make-bowerbird-help.git, \
+		branch=0.1.0, \
+		entry=bowerbird.mk)
 endif
 
 test-git-dependency-live-tag:

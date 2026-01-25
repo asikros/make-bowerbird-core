@@ -5,11 +5,11 @@
 
 ifdef TEST_GIT_DEPENDENCY_LIVE_DEV_MODE
 $(call bowerbird::core::git-dependency, \
-    name=live-test-dev-mode, \
-    path=$(WORKDIR_TEST)/test-git-dependency-live-dev-mode/deps, \
-    url=https://github.com/asikros/make-bowerbird-core.git, \
-    branch=main, \
-    entry=bowerbird.mk)
+		name=live-test-dev-mode, \
+		path=$(WORKDIR_TEST)/test-git-dependency-live-dev-mode/deps, \
+		url=https://github.com/asikros/make-bowerbird-core.git, \
+		branch=main, \
+		entry=bowerbird.mk)
 endif
 
 test-git-dependency-live-dev-mode:
