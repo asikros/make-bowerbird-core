@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Initial release of make-bowerbird-core, consolidating make-bowerbird-deps and make-bowerbird-libs
+- Kwargs parser support expanded from 5 to 25 arguments with dynamic tests
 - Git-based loader (`bowerbird-loader.mk`) for simplified bootstrapping
 - Unified core functionality: dependency management + kwargs parsing
 - Kwargs-based API (`bowerbird::core::git-dependency`) available immediately after bootstrap
@@ -29,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bootstrap process: curl single loader → git clone full repo
 - Entry point: `bowerbird-deps.mk` → `bowerbird.mk`
 - Namespace: `bowerbird::libs::*` → `bowerbird::core::*` for main APIs, `bowerbird::lib::*` for utilities
+- Test files formatted with standardized line continuation indentation (two tabs)
 
 ### Deprecated
 - `make-bowerbird-deps` - Use `make-bowerbird-core` instead

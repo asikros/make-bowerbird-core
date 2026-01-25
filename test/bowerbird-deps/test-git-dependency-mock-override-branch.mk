@@ -20,12 +20,12 @@ ifdef TEST_GIT_DEPENDENCY_MOCK_OVERRIDE_BRANCH
 .PHONY: $(WORKDIR_TEST)/test-git-dependency-mock-override-branch/deps/entry.mk
 
 $(call bowerbird::core::git-dependency, \
-    name=mock-dep-override-branch, \
-    path=$(WORKDIR_TEST)/test-git-dependency-mock-override-branch/deps, \
-    url=https://mock.com/repo.git, \
-    branch=main, \
-    entry=entry.mk)
+		name=mock-dep-override-branch, \
+		path=$(WORKDIR_TEST)/test-git-dependency-mock-override-branch/deps, \
+		url=https://mock.com/repo.git, \
+		branch=main, \
+		entry=entry.mk)
 endif
 
 expected-git-dependency-mock-override-branch := \
-	$(call bowerbird::core::test-fixture::expected-git-dependency,branch,https://mock.com/repo.git,$(WORKDIR_TEST)/test-git-dependency-mock-override-branch/deps,feature-xyz,entry.mk)
+		$(call bowerbird::core::test-fixture::expected-git-dependency,branch,https://mock.com/repo.git,$(WORKDIR_TEST)/test-git-dependency-mock-override-branch/deps,feature-xyz,entry.mk)

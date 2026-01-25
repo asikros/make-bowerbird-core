@@ -2,14 +2,14 @@
 WORKDIR_DEPS ?= $(error ERROR: Undefined variable WORKDIR_DEPS)
 
 # Dependencies
-$(call bowerbird::temp::git-dependency, \
+$(call bowerbird::core::git-dependency, \
 	name=bowerbird-help, \
 	path=$(WORKDIR_DEPS)/bowerbird-help, \
 	url=https://github.com/asikros/make-bowerbird-help.git, \
 	branch=main, \
 	entry=bowerbird.mk)
 
-$(call bowerbird::temp::git-dependency, \
+$(call bowerbird::core::git-dependency, \
 	name=bowerbird-test, \
 	path=$(WORKDIR_DEPS)/bowerbird-test, \
 	url=https://github.com/asikros/make-bowerbird-test.git, \

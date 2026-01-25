@@ -19,12 +19,12 @@ ifdef TEST_GIT_DEPENDENCY_MOCK_PATH
 .PHONY: $(WORKDIR_TEST)/test-git-dependency-mock-path/deps/vendor/mock-dep/bowerbird.mk
 
 $(call bowerbird::core::git-dependency, \
-    name=mock-dep-path, \
-    path=$(WORKDIR_TEST)/test-git-dependency-mock-path/deps/vendor/mock-dep, \
-    url=https://mock.com/repo.git, \
-    branch=main, \
-    entry=bowerbird.mk)
+		name=mock-dep-path, \
+		path=$(WORKDIR_TEST)/test-git-dependency-mock-path/deps/vendor/mock-dep, \
+		url=https://mock.com/repo.git, \
+		branch=main, \
+		entry=bowerbird.mk)
 endif
 
 expected-git-dependency-mock-path := \
-	$(call bowerbird::core::test-fixture::expected-git-dependency,branch,https://mock.com/repo.git,$(WORKDIR_TEST)/test-git-dependency-mock-path/deps/vendor/mock-dep,main,bowerbird.mk)
+		$(call bowerbird::core::test-fixture::expected-git-dependency,branch,https://mock.com/repo.git,$(WORKDIR_TEST)/test-git-dependency-mock-path/deps/vendor/mock-dep,main,bowerbird.mk)

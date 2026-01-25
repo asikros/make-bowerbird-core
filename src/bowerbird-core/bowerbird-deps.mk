@@ -78,19 +78,19 @@ BOWERBIRD_GIT_TIMEOUT ?= 30
 #		make check bowerbird-help.branch=feature-xyz
 #
 define bowerbird::core::git-dependency
-$(eval $(call bowerbird::temp::kwargs-parse,$1,$2,$3,$4,$5))\
-$(eval $(call bowerbird::temp::kwargs-require,name,'name' parameter is required))\
-$(eval $(call bowerbird::temp::kwargs-require,path,'path' parameter is required))\
-$(eval $(call bowerbird::temp::kwargs-require,url,'url' parameter is required))\
-$(eval $(call bowerbird::temp::kwargs-require,entry,'entry' parameter is required))\
-$(eval $(call bowerbird::temp::kwargs-require,branch,'branch' parameter is required))\
-$(eval $(if $(filter . ..,$(call bowerbird::temp::kwargs,path)),$(error ERROR: 'path' cannot be '.' or '..': $(call bowerbird::temp::kwargs,path))))\
-$(eval __dep_name := $(call bowerbird::temp::kwargs,name))\
-$(eval $(__dep_name).path ?= $(call bowerbird::temp::kwargs,path))\
-$(eval $(__dep_name).url ?= $(call bowerbird::temp::kwargs,url))\
+$(eval $(call bowerbird::core::kwargs-parse,$1,$2,$3,$4,$5))\
+$(eval $(call bowerbird::core::kwargs-require,name,'name' parameter is required))\
+$(eval $(call bowerbird::core::kwargs-require,path,'path' parameter is required))\
+$(eval $(call bowerbird::core::kwargs-require,url,'url' parameter is required))\
+$(eval $(call bowerbird::core::kwargs-require,entry,'entry' parameter is required))\
+$(eval $(call bowerbird::core::kwargs-require,branch,'branch' parameter is required))\
+$(eval $(if $(filter . ..,$(call bowerbird::core::kwargs,path)),$(error ERROR: 'path' cannot be '.' or '..': $(call bowerbird::core::kwargs,path))))\
+$(eval __dep_name := $(call bowerbird::core::kwargs,name))\
+$(eval $(__dep_name).path ?= $(call bowerbird::core::kwargs,path))\
+$(eval $(__dep_name).url ?= $(call bowerbird::core::kwargs,url))\
 $(eval $(__dep_name).branch ?=)\
-$(if $(call bowerbird::temp::kwargs-defined,branch),$(eval $(__dep_name).branch := $(call bowerbird::temp::kwargs,branch)))\
-$(eval $(__dep_name).entry ?= $(call bowerbird::temp::kwargs,entry))\
+$(if $(call bowerbird::core::kwargs-defined,branch),$(eval $(__dep_name).branch := $(call bowerbird::core::kwargs,branch)))\
+$(eval $(__dep_name).entry ?= $(call bowerbird::core::kwargs,entry))\
 $(eval $(call bowerbird::core::__git_dependency_impl,$($(__dep_name).path),$($(__dep_name).url),$($(__dep_name).branch),$($(__dep_name).entry)))
 endef
 
