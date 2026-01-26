@@ -1,5 +1,4 @@
 # Config
-.DEFAULT_GOAL := help
 .DELETE_ON_ERROR:
 .SUFFIXES:
 MAKEFLAGS += --jobs
@@ -37,7 +36,7 @@ include make/deps.mk
 #		Empty paths.
 #
 .PHONY: private_clean
-private_clean: PATHS_CLEAN = $(WORKDIR_DEPS) $(WORKDIR_ROOT) $(WORKDIR_TEST)
+private_clean: PATHS_CLEAN = $(WORKDIR_BUILD) $(WORKDIR_DEPS) $(WORKDIR_ROOT) $(WORKDIR_TEST)
 private_clean:
 	@echo "INFO: Cleaning directories"
 	$(foreach path,$(PATHS_CLEAN),\
